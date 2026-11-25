@@ -174,7 +174,19 @@ final class TickettService
     private function cachePath(): string
     {
         $sufixo = idioma() === 'en' ? '-en' : '';
-        return ROOT . '/storage/cache/tickett-' . $this->eventId() . $sufixo . '.json';
+        return $this->cacheDir() . '/tickett-' . $this->eventId() . $sufixo . '.json';
+    }
+
+    /**
+     * storage/cache, ou o diretório temporário na Vercel (código só de leitura, exceto /tmp) ou se não for gravável.
+     */
+    private function cacheDir(): string
+    {
+        $dir = ROOT . '/storage/cache';
+        if (getenv('VERCEL') !== false || !is_writable($dir)) {
+            return sys_get_temp_dir() . '/festeja-cache';
+        }
+        return $dir;
     }
 
     private function result(bool $ok, bool $stale, ?array $event, array $products): array

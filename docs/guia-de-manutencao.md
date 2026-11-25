@@ -878,6 +878,43 @@ Checklist:
 
 Ficheiros ignorados pelo git e que não se publicam pelo repositório: `config/site.local.php` e `storage/cache/*`. Cria-os no servidor.
 
+### 16.1 Publicar na Vercel
+
+O site corre na Vercel com o runtime comunitário `vercel-php@0.9.0` (PHP 8.5). Não é um runtime oficial da Vercel, e a Vercel recomenda contentores para projetos novos. Se o runtime deixar de servir, a alternativa é um contentor Docker.
+
+**Como funciona**
+
+- `api/index.php` é a única função PHP. Entrega o pedido ao mesmo front controller do local (`public/index.php`).
+- `vercel.json` manda `/assets/*` para `public/assets/` (ficheiros estáticos, cache de 7 dias). Tudo o resto vai para `api/index.php`: `/checkout` e `/checkout/relay/*` (incluindo POST), `/en/*`, `/sitemap.xml`, `/robots.txt` e `/llms.txt`.
+- `.vercelignore` deixa de fora `dev/`, `docs/`, `design-system/`, `bin/`, `extraido-pdf/`, os `*.md` e `storage/cache/*`. O que entra é `api/`, `app/`, `config/`, `content/`, `public/` e `vercel.json`.
+- O sistema de ficheiros da Vercel é só de leitura, exceto `/tmp`. Por isso a cache da Tickett vai para `sys_get_temp_dir()/festeja-cache` quando a variável `VERCEL` está definida ou quando `storage/cache` não é gravável (`TickettService::cacheDir()`). O site não grava mais nada em disco. Os erros vão para o log do runtime.
+
+**Variáveis de ambiente** (Settings > Environment Variables do projeto). Sem nenhuma, o site arranca em produção, com a Tickett real e o evento 2001.
+
+| Variável | Predefinido na Vercel | Para que serve |
+|---|---|---|
+| `SITE_ENV` | `prod` | `dev` ou `prod`. Em `prod`, `/kit` responde 404 e a faixa "Rascunho" das páginas legais não aparece. |
+| `BASE_URL` | `https://` + `VERCEL_PROJECT_PRODUCTION_URL` (ou o `Host` do pedido) | Domínio público: canonical, sitemap, JSON-LD. Com domínio próprio, define-a. |
+| `TICKETT_BASE` | `https://checkout.lebillet.eu` | Checkout da Tickett. |
+| `TICKETT_EVENT_ID` | `2001` | ID do evento. Provisório: confirmar com a Tickett. |
+| `GA4_ID` | vazio | Sem efeito por agora. Ver a secção 13. |
+
+Não há segredos no repositório. Se algum passar a existir, vai como variável da Vercel.
+
+**Limitações**
+
+- A cache em `/tmp` é efémera e local a cada instância. Um cold start ou uma instância nova começa vazia e vai à Tickett. O TTL continua a ser 5 minutos (`tickett.cache_ttl`).
+- Cold starts: o primeiro pedido a uma instância nova demora mais, porque arranca o PHP.
+- O simulador da Tickett (`dev/tickett-stub/`) não corre na Vercel. Com `TICKETT_BASE` apontado ao simulador, a bilheteira não funciona. Em produção, a fonte é a Tickett real.
+- O proxy `/checkout` chama a Tickett real em cada pedido de página e de relay. Se a Tickett estiver lenta, o checkout espera até aos timeouts do proxy (15 s na página, 10 s no relay).
+- Se a Tickett não responder, ou o evento não tiver bilhetes à venda, a grelha mostra a mensagem de bilheteira indisponível. Esse é o comportamento esperado.
+- Em `/assets`, o `?v=` muda quando o ficheiro muda. Um URL sem `?v=` (por exemplo, um caminho em `content/*.json`) pode ficar em cache até 7 dias.
+- `vercel.json` usa `includeFiles`. A documentação do runtime diz que isso pode não ser suportado. Por isso, depois de publicar, confirma que a página abre no URL da Vercel. Se não abrir, é este o ponto a rever.
+
+**Depois de publicar**
+
+Abre `/`, `/en`, `/bilhetes`, `/checkout`, `/sitemap.xml` e `/robots.txt`. Confirma que os canonical usam o domínio certo (`BASE_URL`).
+
 ---
 
 

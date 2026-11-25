@@ -71,6 +71,7 @@ festeja/
 ## Documentação
 
 - [docs/guia-de-manutencao.md](docs/guia-de-manutencao.md): como mudar cada coisa, por tarefa. Começa aqui.
+- Publicar na Vercel (runtime `vercel-php`, variáveis de ambiente, limitações): secção 16.1 do [guia de manutenção](docs/guia-de-manutencao.md).
 - [content/LEIA-ME.md](content/LEIA-ME.md): campos dos ficheiros JSON (incluindo `home.json` e os transportes), e as traduções em `content/en/`.
 - Idiomas: português de Portugal na raiz (`/bilhetes`) e inglês com `/en` (`/en/tickets`). Mapa de rotas em `app/Helpers/Rotas.php`; textos de interface em `app/Lang/`. Ver a secção 19 do guia.
 - [dev/og/README.md](dev/og/README.md): imagem de partilha e ícone de ecrã inicial.

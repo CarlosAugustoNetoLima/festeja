@@ -43,6 +43,6 @@ if (empty($catalog['ok'])) {
 <?php else: ?>
 <div class="ticket-empty">
   <p class="ticket-empty__text"><?= e($mensagem) ?></p>
-  <a class="fj-btn fj-btn--primary" href="<?= e(TickettService::comIdioma($checkoutUrl)) ?>" data-checkout-open><?= e(t('botao.ir_bilheteira')) ?></a>
+  <a class="fj-btn fj-btn--primary" href="<?= e($checkoutUrl) ?>" data-checkout-open><?= e(t('botao.ir_bilheteira')) ?></a>
 </div>
 <?php endif; ?>

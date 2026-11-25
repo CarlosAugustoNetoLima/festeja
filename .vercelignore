@@ -1,0 +1,18 @@
+# Só o que o runtime lê entra no deploy: app/, config/, content/, public/, api/ e vercel.json.
+# Ferramentas, documentação e material de design ficam de fora.
+dev/
+docs/
+design-system/
+extraido-pdf/
+bin/
+.git/
+.DS_Store
+
+# Cache da Tickett: na Vercel grava-se em /tmp (TickettService::cacheDir).
+storage/cache/*
+
+# Documentação em Markdown não é lida pelo site.
+*.md
+
+# Configuração local (ignorada pelo git, não deve sair daqui).
+config/site.local.php
