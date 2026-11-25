@@ -23,8 +23,8 @@ const MESES = ['JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO',
 
 const festival = JSON.parse(fs.readFileSync(path.join(ROOT, 'content/festival.json'), 'utf8'));
 
-// Data em duas linhas, em maiúsculas, como o hero: "23 E 24" / "JULHO".
-// Meses diferentes: "23 JULHO" / "A 1 AGOSTO" (mesma lógica de Format::range).
+// Data em duas linhas, em maiúsculas, como o hero: "30 E 31" / "JULHO".
+// Meses diferentes: "30 JULHO" / "A 1 AGOSTO" (mesma lógica de Format::range).
 function dataDoFestival({ inicio, fim }) {
   const [, m1, d1] = inicio.split('-').map(Number);
   const [, m2, d2] = fim.split('-').map(Number);

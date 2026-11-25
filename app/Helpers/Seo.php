@@ -224,11 +224,18 @@ final class Seo
         $minimo = self::precoMinimo($catalog);
         $bilhetes = self::abs('/bilhetes');
         $taxa = $minimo !== null && !(new TickettService(config('tickett')))->taxaIncluida() ? ' + taxa de serviço' : '';
-        $linhas[] = $minimo !== null
-            ? '- Bilhetes: desde ' . Format::price($minimo) . $taxa . ', em ' . $bilhetes
-            : '- Bilhetes: ' . $bilhetes;
+        if ($minimo !== null) {
+            $linhas[] = '- Bilhetes: desde ' . Format::price($minimo) . $taxa . ', em ' . $bilhetes;
+        } elseif (TickettService::temEvento(config('tickett'))) {
+            $linhas[] = '- Bilhetes: ' . $bilhetes;
+        } else {
+            $linhas[] = '- Bilhetes: venda em breve, em ' . $bilhetes;
+        }
+        // Sem evento não há checkout para indicar (checkoutUrl() devolve null).
         $checkout = $catalog['event']['checkout_url'] ?? (new TickettService(config('tickett')))->checkoutUrl();
-        $linhas[] = '- Onde comprar: Tickett, em ' . $checkout;
+        if ($checkout !== null) {
+            $linhas[] = '- Onde comprar: Tickett, em ' . $checkout;
+        }
 
         $linhas[] = '';
         $linhas[] = '## Cartaz';

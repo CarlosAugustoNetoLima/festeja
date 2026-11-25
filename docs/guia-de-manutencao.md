@@ -57,12 +57,12 @@ Secções transversais: [Como o site fala com a Tickett](#como-o-site-fala-com-a
 **O que mudar.** Exemplo real do ficheiro:
 
 ```json
-"datas": { "inicio": "2027-07-23", "fim": "2027-07-24", "rever": "A apresentação diz 30 e 31 julho; o Instagram anunciou 23 e 24 julho." },
+"datas": { "inicio": "2027-07-30", "fim": "2027-07-31" },
 "dias": [
-  { "id": "dia-1", "data": "2027-07-23", "portas": "16:00", "rever": true },
-  { "id": "dia-2", "data": "2027-07-24", "portas": "16:00", "rever": true }
+  { "id": "dia-1", "data": "2027-07-30", "portas": "16:00", "rever": true },
+  { "id": "dia-2", "data": "2027-07-31", "portas": "16:00", "rever": true }
 ],
-"local": { "nome": "Estádio do Olivais e Moscavide", "zona": "Moscavide, Lisboa", "morada": null, "geo": null, "rever": "Morada completa e coordenadas" },
+"local": { "nome": "Estádio Olivais e Moscavide", "zona": "Moscavide, Lisboa", "morada": null, "geo": null, "rever": "Morada completa e coordenadas" },
 "idade_minima": null,
 ```
 
@@ -75,7 +75,7 @@ Regras:
 - `geo` é `"geo": { "lat": <número>, "lng": <número> }`. Enquanto for `null`, o JSON-LD não inclui coordenadas.
 - `idade_minima` é um número ou `null`.
 - `"rever": true` num dia mostra "(a confirmar)" nas páginas. Remove a marca quando a organização confirmar.
-- `datas.rever` e `local.rever` são notas internas. Não aparecem no site.
+- `local.rever` é uma nota interna. Não aparece no site.
 
 **O que atualiza sozinho:**
 
@@ -136,7 +136,7 @@ Os textos de SEO continuam em `festival.json`, como descrito abaixo.
 
 ```json
 "mote": "O festival que liga continentes",
-"resumo": "Dois dias de música dos países africanos de língua portuguesa no Estádio do Olivais e Moscavide, em Lisboa.",
+"resumo": "Dois dias de música dos países africanos de língua portuguesa no Estádio Olivais e Moscavide, em Lisboa.",
 "chamada": "Dois dias de música dos países africanos de língua portuguesa, em Lisboa.",
 ```
 
@@ -797,7 +797,7 @@ Só depois disto ligas o ID em `config/site.local.php`. Sem os passos 1 e 4, lig
 | Página | Texto |
 | --- | --- |
 | `/` | `resumo` de `festival.json` |
-| `/bilhetes` | "Bilhetes do Festival Festeja 2027: 23 e 24 julho no Estádio do Olivais e Moscavide. Preços com taxas incluídas, pagamento seguro pela Tickett." (**a rever**: o texto diz 'taxas incluídas', que já não é verdade; ver secção 7 e "Antes de lançar") |
+| `/bilhetes` | "Bilhetes do Festival Festeja 2027: 30 e 31 julho no Estádio Olivais e Moscavide. Preços com taxas incluídas, pagamento seguro pela Tickett." (**a rever**: o texto diz 'taxas incluídas', que já não é verdade; ver secção 7 e "Antes de lançar") |
 | `/cartaz` | "Cartaz do Festival Festeja 2027: …" com os 4 primeiros artistas de destaque 1 (e "e mais" se houver mais), e as datas e o local |
 | `/informacoes` | "Perguntas frequentes sobre o Festival Festeja 2027: …" com os temas dos grupos de `faq.json` |
 | `/como-chegar` | "Como chegar ao {local}, em {zona}: …" com os meios de `transportes`, e a hora das portas se for a mesma nos dois dias |
@@ -889,14 +889,14 @@ O site corre na Vercel com o runtime comunitário `vercel-php@0.9.0` (PHP 8.5). 
 - `.vercelignore` deixa de fora `dev/`, `docs/`, `design-system/`, `bin/`, `extraido-pdf/`, os `*.md` e `storage/cache/*`. O que entra é `api/`, `app/`, `config/`, `content/`, `public/` e `vercel.json`.
 - O sistema de ficheiros da Vercel é só de leitura, exceto `/tmp`. Por isso a cache da Tickett vai para `sys_get_temp_dir()/festeja-cache` quando a variável `VERCEL` está definida ou quando `storage/cache` não é gravável (`TickettService::cacheDir()`). O site não grava mais nada em disco. Os erros vão para o log do runtime.
 
-**Variáveis de ambiente** (Settings > Environment Variables do projeto). Sem nenhuma, o site arranca em produção, com a Tickett real e o evento 2001.
+**Variáveis de ambiente** (Settings > Environment Variables do projeto). Sem nenhuma, o site arranca em produção, com a Tickett real e **sem evento**. `TICKETT_EVENT_ID` é obrigatório para vender: sem ele o site mostra "venda em breve" (e o botão do Instagram), não contacta a Tickett e não tem checkout (`/checkout` responde 404). O 2001 é só do simulador de dev; na Tickett real é outro evento.
 
 | Variável | Predefinido na Vercel | Para que serve |
 |---|---|---|
 | `SITE_ENV` | `prod` | `dev` ou `prod`. Em `prod`, `/kit` responde 404 e a faixa "Rascunho" das páginas legais não aparece. |
 | `BASE_URL` | `https://` + `VERCEL_PROJECT_PRODUCTION_URL` (ou o `Host` do pedido) | Domínio público: canonical, sitemap, JSON-LD. Com domínio próprio, define-a. |
 | `TICKETT_BASE` | `https://checkout.lebillet.eu` | Checkout da Tickett. |
-| `TICKETT_EVENT_ID` | `2001` | ID do evento. Provisório: confirmar com a Tickett. |
+| `TICKETT_EVENT_ID` | vazio (sem venda) | ID do evento, só dígitos. **Obrigatório para vender:** sem ele o site mostra "venda em breve". Confirmar o ID com a Tickett. |
 | `GA4_ID` | vazio | Sem efeito por agora. Ver a secção 13. |
 
 Não há segredos no repositório. Se algum passar a existir, vai como variável da Vercel.
@@ -1193,8 +1193,8 @@ Estes pontos são provisórios. Não os deixes assim em produção.
 
 | Item | Onde | Estado |
 | --- | --- | --- |
-| Cartaz de exemplo (cartaz de 2026) | `content/artistas.json` | Substituir pelo cartaz de 2027. As datas de confirmação são inventadas |
-| Datas: 23–24 julho ou 30–31 julho | `content/festival.json` | Conflito entre a apresentação e o Instagram. Confirmar com a organização |
+| Cartaz (18 nomes da arte oficial de 2027) | `content/artistas.json` | Nomes, países e destaques seguem a arte. A divisão por dia e as datas de `confirmado_em` são provisórias |
+| Datas: 30 e 31 julho (resolvido pela arte oficial do cartaz) | `content/festival.json` | Confirmado. Ver `plano-implementacao.md`, ponto 2 |
 | Horas de portas (16h00) | `content/festival.json` (`dias[].portas`) | `rever: true`. Também escrito à mão na FAQ |
 | Morada e coordenadas | `content/festival.json` (`local`) | `null`. Página Como chegar com "Morada completa em breve." |
 | Idade mínima | `content/festival.json` (`idade_minima`) | `null` |

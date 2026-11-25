@@ -3,14 +3,14 @@
   "edicao": "2027",
   "marca": "RTP África",
   "mote": "O festival que liga continentes",
-  "resumo": "Dois dias de música dos países africanos de língua portuguesa no Estádio do Olivais e Moscavide, em Lisboa.",
+  "resumo": "Dois dias de música dos países africanos de língua portuguesa no Estádio Olivais e Moscavide, em Lisboa.",
   "chamada": "Dois dias de música dos países africanos de língua portuguesa, em Lisboa.",
-  "datas": { "inicio": "2027-07-23", "fim": "2027-07-24", "rever": "A apresentação diz 30 e 31 julho; o Instagram anunciou 23 e 24 julho." },
+  "datas": { "inicio": "2027-07-30", "fim": "2027-07-31" },
   "dias": [
-    { "id": "dia-1", "data": "2027-07-23", "portas": "16:00", "rever": true },
-    { "id": "dia-2", "data": "2027-07-24", "portas": "16:00", "rever": true }
+    { "id": "dia-1", "data": "2027-07-30", "portas": "16:00", "rever": true },
+    { "id": "dia-2", "data": "2027-07-31", "portas": "16:00", "rever": true }
   ],
-  "local": { "nome": "Estádio do Olivais e Moscavide", "zona": "Moscavide, Lisboa", "morada": null, "geo": null, "rever": "Morada completa e coordenadas" },
+  "local": { "nome": "Estádio Olivais e Moscavide", "zona": "Moscavide, Lisboa", "morada": null, "geo": null, "rever": "Morada completa e coordenadas" },
   "transportes": [
     { "icone": "train", "titulo": "Metro", "texto": "Linha Vermelha, estações Moscavide e Olivais", "rever": true },
     { "icone": "train", "titulo": "Comboio", "texto": "estação do Oriente", "rever": true },

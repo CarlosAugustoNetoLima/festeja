@@ -1,12 +1,14 @@
 <?php
 // Grelha de bilhetes a partir do catálogo da Tickett (resultado de TickettService::getCatalog()).
 // Props: catalog (array com ok, stale, event, products), checkoutUrl (checkout geral do evento).
-// Mensagens, por esta ordem: falha da Tickett sem cache (ok = false); venda por abrir (upcoming); venda terminada (closed);
-// sem produtos à venda. Só com a venda aberta e produtos é que mostra a grelha. Cache antiga (stale) mostra-se sem aviso.
+// Mensagens, por esta ordem: sem TICKETT_EVENT_ID (venda em breve, com link para o Instagram); falha da Tickett sem cache
+// (ok = false); venda por abrir (upcoming); venda terminada (closed); sem produtos à venda. Só com a venda aberta e produtos
+// é que mostra a grelha. Cache antiga (stale) mostra-se sem aviso.
 
 use App\Helpers\Component;
 use App\Helpers\Format;
 use App\Helpers\Rotas;
+use App\Services\Content;
 use App\Services\TickettService;
 
 $catalog = $catalog ?? ['ok' => false, 'stale' => false, 'event' => null, 'products' => []];
@@ -20,7 +22,11 @@ if (!empty($catalog['stale'])) {
 
 $venda = is_array($event) ? ($event['sale'] ?? []) : [];
 $estadoVenda = (string) ($venda['status'] ?? '');
-if (empty($catalog['ok'])) {
+$semEvento = !TickettService::temEvento(config('tickett'));
+$instagram = Content::get('festival')['redes']['instagram'] ?? null;
+if ($semEvento) {
+    $mensagem = t('bilhetes.em_breve');
+} elseif (empty($catalog['ok'])) {
     $mensagem = t('bilhetes.bilheteira_sem_resposta');
 } elseif ($estadoVenda === 'upcoming') {
     $mensagem = !empty($venda['opens_at'])
@@ -40,6 +46,13 @@ if (empty($catalog['ok'])) {
   <?= Component::render('TicketCard', ['product' => $product, 'checkoutUrl' => $checkoutUrl]) ?>
   <?php endforeach; ?>
 </ul>
+<?php elseif ($semEvento): ?>
+<div class="ticket-empty">
+  <p class="ticket-empty__text"><?= e($mensagem) ?></p>
+  <?php if ($instagram !== null): ?>
+  <a class="fj-btn fj-btn--secondary" href="<?= e($instagram) ?>" rel="noopener"><?= e(t('footer.instagram')) ?></a>
+  <?php endif; ?>
+</div>
 <?php else: ?>
 <div class="ticket-empty">
   <p class="ticket-empty__text"><?= e($mensagem) ?></p>

@@ -18,6 +18,7 @@ return [
     'bilhetes.badge_esgotado' => 'Sold out',
     'bilhetes.badge_ultimos' => 'Last tickets',
     'bilhetes.bilheteira_sem_resposta' => 'The ticket office is not responding. Buy directly on the ticket office page.',
+    'bilhetes.em_breve' => 'Ticket sales open soon. Follow us on Instagram to hear first.',
     'bilhetes.indisponiveis' => 'Tickets are unavailable at the moment. Please try the ticket office.',
     'bilhetes.lead' => 'Choose your ticket and pay without leaving the site.',
     'bilhetes.pagamento_texto' => 'You pay at checkout, using the payment methods the Tickett ticket office accepts at that time.',

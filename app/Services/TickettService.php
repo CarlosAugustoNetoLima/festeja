@@ -33,6 +33,14 @@ final class TickettService
     }
 
     /**
+     * true se há event_id (TICKETT_EVENT_ID em produção). Sem ele não há evento para vender: nada vai à Tickett.
+     */
+    public static function temEvento(array $cfg): bool
+    {
+        return (int) ($cfg['event_id'] ?? 0) > 0;
+    }
+
+    /**
      * @return array{ok: bool, stale: bool, event: ?array, products: array}
      */
     public function getCatalog(): array
@@ -49,6 +57,10 @@ final class TickettService
      */
     private function lerCatalogo(): array
     {
+        if (!self::temEvento($this->cfg)) {
+            return $this->semEvento();
+        }
+
         $cachePath = $this->cachePath();
         $cached = $this->readCache($cachePath);
         $ttl = (int) ($this->cfg['cache_ttl'] ?? 300);
@@ -73,9 +85,14 @@ final class TickettService
     /**
      * URL do checkout geral do evento. Com $productId, a URL do bilhete (?produto=) se estiver no catálogo.
      * O idioma (predefinido: o da página) vai como ?l= da Tickett (pt_pt ou en_us), ver comIdioma().
+     * Sem event_id devolve null: não há checkout para apontar.
      */
-    public function checkoutUrl(?int $productId = null, ?string $idioma = null): string
+    public function checkoutUrl(?int $productId = null, ?string $idioma = null): ?string
     {
+        if (!self::temEvento($this->cfg)) {
+            return null;
+        }
+
         $produto = $this->produto($productId);
         $url = $produto !== null ? $produto['checkout_url'] : $this->checkoutPageUrl();
 
@@ -192,6 +209,20 @@ final class TickettService
     private function result(bool $ok, bool $stale, ?array $event, array $products): array
     {
         return ['ok' => $ok, 'stale' => $stale, 'event' => $event, 'products' => $products];
+    }
+
+    /**
+     * Sem event_id: catálogo vazio e venda por abrir (sem data). Não é uma falha, por isso ok é true e não há pedido HTTP.
+     */
+    private function semEvento(): array
+    {
+        return $this->result(true, false, [
+            'id' => null,
+            'name' => null,
+            'currency' => 'EUR',
+            'checkout_url' => null,
+            'sale' => ['status' => 'upcoming', 'opens_at' => null],
+        ], []);
     }
 
     /**

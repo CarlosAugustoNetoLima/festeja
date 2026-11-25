@@ -24,6 +24,7 @@ node dev/qa/qa.mjs desempenho      # peso, pedidos, JS do site, vendor GSAP, LCP
 node dev/qa/qa.mjs seo             # robots, sitemap, llms e HTTP de cada página
 node dev/qa/qa.mjs i18n            # pt e en: HTTP, lang, hreflang recíprocos, canonical, seletor, texto pt nas páginas en, modal en (?lang=en)
 node dev/qa/qa.mjs fallback        # simulador desligado: com cache e sem cache (ver abaixo)
+node dev/qa/qa.mjs sem-evento      # produção sem TICKETT_EVENT_ID (SITE_ENV=prod, TICKETT_DEMO=0): servidor temporário na porta 8090; sem checkout, "em breve" em pt e en
 node dev/qa/qa.mjs all             # tudo, exceto fallback
 ```
 
@@ -40,6 +41,7 @@ Cada verificação imprime `PASS` ou `FAIL`. No fim sai com código 1 se houver 
 | `QA_STUB` | `http://127.0.0.1:8081` | URL do simulador |
 | `QA_CHROME` | Google Chrome em `/Applications` | binário do Chrome |
 | `QA_PROJECT` | duas pastas acima de `dev/qa/` | raiz do projeto (cache e simulador) |
+| `QA_SEM_EVENTO_PORTA` | `8090` | porta do servidor temporário de `sem-evento` |
 
 ## Fallback (simulador desligado)
 

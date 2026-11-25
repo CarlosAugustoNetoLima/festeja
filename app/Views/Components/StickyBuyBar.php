@@ -15,5 +15,5 @@ $taxaIncluida = $servico->taxaIncluida();
     <strong><?= $minPrice !== null ? '<span class="fj-buybar__de">' . e(t('buybar.desde')) . '</span> ' . e(Format::price($minPrice)) : e(t('buybar.bilhetes')) ?></strong>
     <span><?= e($taxaIncluida ? t('taxa.incluidas') : t('taxa.acresce_curta')) ?></span>
   </p>
-  <a class="fj-btn fj-btn--primary" href="<?= e(Rotas::url('bilhetes')) ?>" data-checkout-open><?= e(t('botao.comprar_bilhetes')) ?></a>
+  <a class="fj-btn fj-btn--primary" href="<?= e(Rotas::url('bilhetes')) ?>"<?= TickettService::temEvento(config('tickett')) ? ' data-checkout-open' : '' ?>><?= e(t('botao.comprar_bilhetes')) ?></a>
 </div>

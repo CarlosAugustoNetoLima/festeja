@@ -7,8 +7,11 @@
 use App\Helpers\Icon;
 use App\Helpers\Rotas;
 use App\Services\Content;
+use App\Services\TickettService;
 
 $active = $active ?? null;
+// Sem evento na Tickett, os botões de compra são só links para /bilhetes (sem abrir o checkout).
+$dataCompra = TickettService::temEvento(config('tickett')) ? ' data-checkout-open' : '';
 $festival = Content::get('festival');
 $alternativo = $alternativo ?? Rotas::trocaIdioma('/');
 $lang = idioma();
@@ -64,8 +67,8 @@ $seletor = static function (string $classe) use ($alternativo, $lang): string {
         <span class="site-header__cart-count">0</span>
         <span class="fj-visually-hidden"><?= e(t('carrinho.bilhetes')) ?></span>
       </a>
-      <a class="fj-btn fj-btn--primary site-header__buy" href="<?= e(Rotas::url('bilhetes')) ?>" data-checkout-open><?= e(t('botao.comprar_bilhetes')) ?></a>
-      <a class="fj-btn fj-btn--primary site-header__buy-compact" href="<?= e(Rotas::url('bilhetes')) ?>" data-checkout-open><?= e(t('nav.bilhetes')) ?></a>
+      <a class="fj-btn fj-btn--primary site-header__buy" href="<?= e(Rotas::url('bilhetes')) ?>"<?= $dataCompra ?>><?= e(t('botao.comprar_bilhetes')) ?></a>
+      <a class="fj-btn fj-btn--primary site-header__buy-compact" href="<?= e(Rotas::url('bilhetes')) ?>"<?= $dataCompra ?>><?= e(t('nav.bilhetes')) ?></a>
       <button type="button" class="site-header__menu-btn" aria-expanded="false" aria-controls="menu-movel" data-menu-toggle>
         <?= Icon::svg('menu', ['class' => 'icon-menu']) ?>
         <?= Icon::svg('x', ['class' => 'icon-x']) ?>
@@ -83,7 +86,7 @@ $seletor = static function (string $classe) use ($alternativo, $lang): string {
       </ul>
     </nav>
     <div class="mobile-menu__foot">
-      <a class="fj-btn fj-btn--primary fj-btn--lg fj-btn--block" href="<?= e(Rotas::url('bilhetes')) ?>" data-checkout-open><?= e(t('botao.comprar_bilhetes')) ?></a>
+      <a class="fj-btn fj-btn--primary fj-btn--lg fj-btn--block" href="<?= e(Rotas::url('bilhetes')) ?>"<?= $dataCompra ?>><?= e(t('botao.comprar_bilhetes')) ?></a>
       <?= $seletor('mobile-menu__idioma') ?>
       <ul class="mobile-menu__social" role="list">
         <li><a href="<?= e($festival['redes']['instagram'] ?? '#') ?>" rel="noopener"><?= e(t('social.instagram_festival')) ?></a></li>

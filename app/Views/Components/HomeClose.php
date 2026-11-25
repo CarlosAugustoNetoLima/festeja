@@ -14,7 +14,7 @@ $eyebrow = (string) ($eyebrow ?? '');
   <div class="wrap home-close__inner">
     <p class="fj-eyebrow home-close__eyebrow"><?= e($eyebrow) ?></p>
     <h2 id="fecho-titulo" class="home-close__date" data-mov="revelar" data-mov-estilo="escala"><?= e($data) ?></h2>
-    <a class="fj-btn fj-btn--lg btn-on-ochre" href="<?= e(Rotas::url('bilhetes')) ?>" data-checkout-open><?= e(t('botao.comprar_bilhetes')) ?></a>
+    <a class="fj-btn fj-btn--lg btn-on-ochre" href="<?= e(Rotas::url('bilhetes')) ?>"<?= \App\Services\TickettService::temEvento(config('tickett')) ? ' data-checkout-open' : '' ?>><?= e(t('botao.comprar_bilhetes')) ?></a>
     <?= Component::render('SymbolGrid', ['simbolos' => [7, 20, 21, 7, 20, 21], 'size' => 64, 'class' => 'home-close__simbolos', 'mov' => true]) ?>
   </div>
 </section>

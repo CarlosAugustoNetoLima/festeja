@@ -22,7 +22,7 @@ Site oficial do Festeja (RTP África). Foco principal: **vender bilhetes** pelo 
 Precisam de resposta antes ou durante a Fase 1:
 
 1. ~~**Modelo de integração com a Tickett** (secção 5): embed oficial no checkout (recomendado) ou proxy como no Crato.~~ **Decidido a 24/11/2026:** proxy no domínio do site, sem alterar o checkout (secção 5, "Decisão de 24/11/2026").
-2. **Datas e local de 2027.** Há conflito: a apresentação diz "30 e 31 julho", mas o post de encerramento de 2026 no Instagram anuncia **23 e 24 de julho de 2027**, no mesmo Estádio do Olivais e Moscavide. Confirmar com a organização, junto com o horário de portas. Até lá o site lê a data só de `content/festival.json`.
+2. **Datas e local de 2027.** **Resolvido pela arte oficial do cartaz:** 30 e 31 de julho de 2027, no Estádio Olivais e Moscavide (Lisboa). Ficou em aberto só o horário de portas (16h00, a confirmar). O post de encerramento de 2026 no Instagram anunciava 23 e 24 de julho; essa informação está desatualizada.
 3. **Idiomas.** Só pt-PT, ou pt-PT + EN para o público internacional. Recomendo começar só em pt-PT e deixar as rotas preparadas para `/en/`.
 4. **Domínio** (ex.: `festeja.pt`) e alojamento (o mesmo servidor PHP do Crato?).
 5. **Ficheiros originais do designer**: logótipos vetoriais, versão monocromática creme, padrão geométrico do fundo e os 24 símbolos. Os SVG atuais foram vetorizados de um JPEG e servem só até lá.
@@ -272,7 +272,7 @@ Cada tarefa é pequena e independente o suficiente para ser delegada; o critéri
 | Checkout da Tickett não cumpre AA | Fluxo principal inacessível | Sem alterações no checkout (decisão de 24/11/2026). Pedir correções à Tickett e ajustar só o tema de cor no site |
 | Cartaz anunciado aos poucos | Páginas vazias | Componentes com estado "Mais nomes em breve"; o FAQ e os bilhetes sustentam a página |
 | Pico de acesso na abertura de um lote | Checkout lento ou carrinho a falhar | Hora de abertura anunciada no site, cache curta da página do evento (5 min), teste de carga no checkout antes da venda |
-| Data de 2027 errada publicada | Perda de confiança e de SEO | Data só em `festival.json`, revista antes do lançamento (conflito 23–24 × 30–31 julho) |
+| Data de 2027 errada publicada | Perda de confiança e de SEO | Data só em `festival.json`, revista antes do lançamento (datas confirmadas pela arte: 30 e 31 julho) |
 | Parser da leitura da Tickett (`TickettService`) partir se mudarem o markup dos bilhetes | Bilhetes em falta ou cache antiga | `dev/tickett-parse-check.php` antes de cada venda; log com prefixo `TickettService:`; cache de 5 min com a última leitura boa |
 | Proxy partir se mudar `var BASE_URL` ou a forma dos atributos da página | Checkout não funciona no iframe, ou o carrinho deixa de funcionar | Teste de compra completo sempre que a Tickett mudar o checkout; `CheckoutProxy::reescrever` é o ponto de ajuste |
 | Pagamentos com redirecionamento externo (Viva Wallet, myPOS, PayPal, PicPay, PIX, 3DS) saem do proxy | Sem `step` nem `purchase`; o cookie `tk_*` não segue; a página de retorno pode não voltar ao site | Pagamento real de teste em cada método antes de lançar. Aceitar a limitação ou pedir à Tickett um retorno ao site |

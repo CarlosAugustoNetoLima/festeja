@@ -18,6 +18,7 @@ return [
     'bilhetes.badge_esgotado' => 'Esgotado',
     'bilhetes.badge_ultimos' => 'Últimos bilhetes',
     'bilhetes.bilheteira_sem_resposta' => 'A bilheteira não respondeu. Compra diretamente na página da bilheteira.',
+    'bilhetes.em_breve' => 'A venda de bilhetes abre em breve. Segue-nos no Instagram para saberes primeiro.',
     'bilhetes.indisponiveis' => 'Os bilhetes estão indisponíveis de momento. Tenta na bilheteira.',
     'bilhetes.lead' => 'Escolhe o teu bilhete e paga sem sair do site.',
     'bilhetes.pagamento_texto' => 'Pagas no checkout, com os métodos que a bilheteira Tickett aceita nesse momento.',

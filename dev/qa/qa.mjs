@@ -13,7 +13,9 @@
 //   seo                 robots, sitemap, llms e HTTP de cada página
 //   i18n                pt e en: HTTP, lang, hreflang recíprocos, canonical, seletor, sem texto pt nas páginas en, modal en (?lang=en)
 //   fallback            simulador desligado: com cache e sem cache (para o simulador, o que é reversível)
+//   sem-evento          produção sem TICKETT_EVENT_ID (servidor temporário, porta 8090): sem checkout, "em breve" em pt e en
 //   all                 tudo exceto fallback
+import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -1299,9 +1301,86 @@ async function i18n() {
   return r.save();
 }
 
+// ---------------------------------------------------------------- sem evento (produção sem TICKETT_EVENT_ID)
+
+const PORTA_SEM_EVENTO = Number(process.env.QA_SEM_EVENTO_PORTA || 8090);
+const TEXTO_PT_EM_BREVE = 'A venda de bilhetes abre em breve. Segue-nos no Instagram para saberes primeiro.';
+const TEXTO_EN_EM_BREVE = 'Ticket sales open soon. Follow us on Instagram to hear first.';
+
+async function semEvento() {
+  const r = new Results('sem-evento');
+  const base = `http://127.0.0.1:${PORTA_SEM_EVENTO}`;
+  if (await fetch(base + '/').then(() => true).catch(() => false)) {
+    throw new Error(`a porta ${PORTA_SEM_EVENTO} já está em uso (QA_SEM_EVENTO_PORTA)`);
+  }
+
+  // Produção sem TICKETT_EVENT_ID e sem modo demonstração (TICKETT_DEMO=0): não há evento. TICKETT_BASE aponta a uma
+  // porta fechada: se o site contactasse a Tickett, o erro aparece no log do servidor.
+  const env = { ...process.env, SITE_ENV: 'prod', BASE_URL: base, TICKETT_BASE: 'http://127.0.0.1:9', TICKETT_DEMO: '0' };
+  delete env.TICKETT_EVENT_ID;
+  delete env.VERCEL;
+  const logFile = path.join(OUT, 'sem-evento-servidor.log');
+  const log = fs.openSync(logFile, 'w');
+  const servidor = spawn('php', ['-S', `127.0.0.1:${PORTA_SEM_EVENTO}`, '-t', 'public', 'public/router-dev.php'],
+    { cwd: PROJECT, env, stdio: ['ignore', log, log] });
+
+  try {
+    const no_ar = await esperarServidor(base);
+    if (!r.check('servidor temporário responde', no_ar, base)) {
+      return r.save();
+    }
+
+    const paginas = ['/', '/en', '/bilhetes', '/en/tickets', '/cartaz', '/en/line-up', '/informacoes', '/como-chegar',
+      '/llms.txt', '/sitemap.xml', '/robots.txt'];
+    const textos = {};
+    for (const p of paginas) {
+      const res = await fetch(base + p, { redirect: 'manual' });
+      textos[p] = await res.text();
+      r.check(`${p} HTTP 200`, res.status === 200, String(res.status));
+      r.check(`${p} sem nenhum link para lebillet`, !/lebillet/i.test(textos[p]));
+    }
+
+    for (const [metodo, caminho] of [['GET', '/checkout'], ['GET', '/checkout/relay/2001/x'], ['POST', '/checkout/relay/2001/x']]) {
+      const res = await fetch(base + caminho, { method: metodo, redirect: 'manual' });
+      r.check(`${metodo} ${caminho} HTTP 404`, res.status === 404, String(res.status));
+    }
+
+    r.check('/bilhetes mostra a mensagem em pt', textos['/bilhetes'].includes(TEXTO_PT_EM_BREVE));
+    r.check('/en/tickets mostra a mensagem em en', textos['/en/tickets'].includes(TEXTO_EN_EM_BREVE));
+    r.check('/bilhetes com link para o Instagram', textos['/bilhetes'].includes('href="https://www.instagram.com/festeja_pt"'));
+
+    for (const p of ['/', '/en', '/bilhetes', '/en/tickets']) {
+      r.check(`${p} sem data-checkout-open nem modal`, !/data-checkout/.test(textos[p]));
+    }
+    r.check('JSON-LD da home sem Offers', !textos['/'].includes('"@type":"Offer"'));
+    r.check('JSON-LD de /bilhetes sem Offers', !textos['/bilhetes'].includes('"@type":"Offer"'));
+    r.check('llms.txt diz venda em breve', textos['/llms.txt'].includes('venda em breve'));
+
+    // Qualquer aviso PHP ou tentativa de contacto à Tickett fica no log do servidor.
+    await sleep(200);
+    const problemas = fs.readFileSync(logFile, 'utf8').split('\n')
+      .filter((l) => /PHP (Warning|Notice|Fatal|Deprecated)|TickettService|Texto em falta|Erro/i.test(l));
+    r.check('sem avisos PHP nem contacto à Tickett no log', problemas.length === 0, problemas.slice(0, 3).join(' | '));
+  } finally {
+    servidor.kill('SIGTERM');
+    fs.closeSync(log);
+  }
+
+  return r.save();
+}
+
+async function esperarServidor(base, ms = 10000) {
+  const fim = Date.now() + ms;
+  while (Date.now() < fim) {
+    if (await fetch(base + '/').then(() => true).catch(() => false)) return true;
+    await sleep(200);
+  }
+  return false;
+}
+
 // ---------------------------------------------------------------- main
 
-const commands = { compra, escolher, 'checkout-layout': checkoutLayout, a11y, teclado, movimento, semjs, overflow, desempenho, seo, i18n, fallback };
+const commands = { compra, escolher, 'checkout-layout': checkoutLayout, a11y, teclado, movimento, semjs, overflow, desempenho, seo, i18n, fallback, 'sem-evento': semEvento };
 const [cmd, arg] = process.argv.slice(2);
 
 async function main() {
@@ -1314,7 +1393,7 @@ async function main() {
   }
   if (cmd === 'all') {
     let fails = 0;
-    for (const name of ['compra', 'escolher', 'checkout-layout', 'a11y', 'teclado', 'movimento', 'semjs', 'overflow', 'desempenho', 'seo', 'i18n']) {
+    for (const name of ['compra', 'escolher', 'checkout-layout', 'a11y', 'teclado', 'movimento', 'semjs', 'overflow', 'desempenho', 'seo', 'i18n', 'sem-evento']) {
       fails += name === 'compra' ? await compra(WIDTHS.desktop) + await compra(WIDTHS.mobile) : await commands[name]();
     }
     return fails;

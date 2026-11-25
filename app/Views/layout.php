@@ -41,7 +41,7 @@
   <?= \App\Helpers\Component::render('StickyBuyBar') ?>
   <?php endif; ?>
 
-  <?php if (is_file(ROOT . '/app/Views/Components/CheckoutModal.php')): ?>
+  <?php if (is_file(ROOT . '/app/Views/Components/CheckoutModal.php') && \App\Services\TickettService::temEvento(config('tickett'))): ?>
   <?= \App\Helpers\Component::render('CheckoutModal', ['idioma' => idioma()]) ?>
   <?php endif; ?>
 

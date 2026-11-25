@@ -147,6 +147,10 @@ function notFound(): never
 // Fica antes da verificação de método, porque o relay aceita POST, e antes do redirect de barra final.
 $proxyUri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 if ($proxyUri === '/checkout' || str_starts_with($proxyUri, '/checkout/relay/')) {
+    // Sem event_id (TICKETT_EVENT_ID por definir) não há checkout: 404, sem contactar a Tickett.
+    if (!\App\Services\TickettService::temEvento(config('tickett'))) {
+        notFound();
+    }
     $proxy = new \App\Services\CheckoutProxy(config('tickett'));
     $metodoProxy = $_SERVER['REQUEST_METHOD'] ?? 'GET';
     $httpsProxy = ($_SERVER['HTTPS'] ?? 'off') !== 'off';

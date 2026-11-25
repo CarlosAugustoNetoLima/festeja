@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 // Na Vercel, o runtime define VERCEL. Sem variáveis de ambiente, o site corre em produção contra a Tickett real.
 $naVercel = getenv('VERCEL') !== false;
+$producao = $naVercel || getenv('SITE_ENV') === 'prod';
 
 $config = [
   'env' => $naVercel ? 'prod' : 'dev',                    // 'prod' em produção
@@ -12,7 +13,9 @@ $config = [
   'tickett' => [
     // Checkout da Tickett tal como está publicado (não é alterado). O site faz de proxy em /checkout.
     'base' => $naVercel ? 'https://checkout.lebillet.eu' : 'http://127.0.0.1:8081',   // produção: https://checkout.lebillet.eu
-    'event_id' => 2001,
+    // 2001 é só do simulador (dev). Em produção não há evento por defeito: na Tickett real o 2001 é outro evento.
+    // Sem TICKETT_EVENT_ID (dígitos) o site não vende: mostra "venda em breve" e não contacta a Tickett.
+    'event_id' => $producao ? null : 2001,
     'cache_ttl' => 300,
     'timeout' => 3,
   ],

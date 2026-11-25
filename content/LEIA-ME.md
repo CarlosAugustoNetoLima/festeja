@@ -4,7 +4,7 @@ Os textos e factos do festival vivem nestes ficheiros JSON. As páginas leem-nos
 
 **Inglês.** Cada ficheiro tem a sua tradução em `content/en/` (`festival.json`, `home.json`, `faq.json`, `artistas.json`, `paginas/*.html`). Em inglês, o `Content` funde a tradução por cima do português: só os campos traduzíveis, com a mesma estrutura. Nomes, datas, países e preços não se traduzem aqui. `faq.json` funde-se por posição (mesma ordem de grupos e perguntas). `artistas.json` funde-se por `slug`. Ver o guia, secção 19.
 
-**Atenção:** o cartaz em `artistas.json` é um **exemplo** (é o cartaz de 2026, a substituir). As datas de confirmação também são inventadas para testar a ordenação.
+**Atenção:** o cartaz em `artistas.json` segue a arte oficial de 2027 (18 nomes, destaques e ordem da arte), mas a divisão por dia e as datas de `confirmado_em` ainda são provisórias.
 
 ## `festival.json`
 
@@ -16,7 +16,6 @@ Dados gerais do evento.
 | `resumo` | Parágrafo de apresentação, usado também na meta description. |
 | `chamada` | Frase curta do hero da página inicial. Não repete o local, que já aparece logo abaixo. |
 | `datas.inicio`, `datas.fim` | Primeiro e último dia (ISO `AAAA-MM-DD`). |
-| `datas.rever` | Nota interna sobre datas por confirmar. Não é mostrada no site. |
 | `dias[]` | Um objeto por dia: `id` (`dia-1`, `dia-2`), `data` (ISO), `portas` (`HH:MM`). `rever: true` marca o que falta confirmar. |
 | `local` | `nome`, `zona`, `morada` e `geo` (coordenadas). `morada` e `geo` estão a `null` até a organização confirmar. |
 | `idade_minima` | Idade mínima, ou `null` se ainda não estiver confirmada. |

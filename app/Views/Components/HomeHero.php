@@ -53,7 +53,7 @@ if ($minPrice !== null) {
         <p class="hero__lead"><?= e($festival['chamada']) ?></p>
 
         <div class="btn-row hero__actions">
-          <a class="fj-btn fj-btn--primary fj-btn--lg" href="<?= e(Rotas::url('bilhetes')) ?>" data-checkout-open><?= e(t('botao.comprar_bilhetes')) ?></a>
+          <a class="fj-btn fj-btn--primary fj-btn--lg" href="<?= e(Rotas::url('bilhetes')) ?>"<?= \App\Services\TickettService::temEvento(config('tickett')) ? ' data-checkout-open' : '' ?>><?= e(t('botao.comprar_bilhetes')) ?></a>
           <a class="fj-btn fj-btn--secondary fj-btn--lg hero__cartaz" href="#cartaz"><?= e(t('botao.ver_cartaz')) ?></a>
         </div>
 

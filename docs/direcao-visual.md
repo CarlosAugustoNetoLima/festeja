@@ -16,7 +16,7 @@ Base: style guide (`design-system/`) e a linha gráfica 2027 da apresentação (
 1. **Header** fixo em `surface`. Logótipo horizontal à esquerda; ao centro, navegação (Cartaz, Bilhetes, Informações, Como chegar); à direita, contador do carrinho (só com bilhetes no carrinho) e botão "Comprar bilhetes". Ganha `border-bottom: 1px var(--line)` depois de 8px de scroll.
 2. **Hero** (100svh menos o header, papel):
    - grelha de 12 colunas;
-   - à esquerda (7 colunas): eyebrow "F E S T I V A L · R T P  Á F R I C A", a data em `poster` (Rubik Dirt, enorme, laranja, "23 E 24 JULHO"), o local em `heading`, o resumo em `lead`, os dois botões (Comprar bilhetes, Ver cartaz) e uma linha de factos (2 dias · 20+ artistas · desde 15 €);
+   - à esquerda (7 colunas): eyebrow "F E S T I V A L · R T P  Á F R I C A", a data em `poster` (Rubik Dirt, enorme, laranja, "30 E 31 JULHO"), o local em `heading`, o resumo em `lead`, os dois botões (Comprar bilhetes, Ver cartaz) e uma linha de factos (2 dias · 20+ artistas · desde 15 €);
    - à direita (5 colunas): só a mandala, grande, centrada na área. O diâmetro é o menor entre o clamp por largura, metade da coluna e metade da altura da área (menos 24 px em baixo): a mandala inteira cabe sempre dentro do hero, sem cortes (nem pelo ecrã, nem pelo header, nem pela faixa);
    - no rodapé do hero, a faixa `Marquee` com os nomes do cartaz, com botão de pausa.
 3. **Factos rápidos** (`surface-sunken`): datas, portas, local, preço desde e organizador, numa linha de 5 colunas com rótulo pequeno e valor em `title`. É o bloco que motores de pesquisa e assistentes de IA citam.
@@ -58,7 +58,7 @@ Base: style guide (`design-system/`) e a linha gráfica 2027 da apresentação (
 A regra antiga ("sem reveal ao scroll, sem parallax") foi substituída: o pedido é mais interação e a navegação mais viva, sem prejudicar a leitura. Há movimento ligado ao scroll, com GSAP 3 (ScrollTrigger e ScrollToPlugin, em `public/assets/vendor/gsap/`), e o módulo `public/assets/js/movimento.js`. Como se marca cada efeito: ver `docs/guia-de-manutencao.md`, secção 18.
 
 - **Navegação.** O cabeçalho esconde-se ao descer (depois de 1 ecrã) e volta ao subir (250 ms). Nunca se esconde com foco dentro ou menu aberto. As âncoras da página (ex.: "Ver cartaz") deslocam-se com o offset do cabeçalho e levam o foco ao título da secção. O indicador da página atual (sublinhado que desliza) segue o rato e o foco pelos links e volta ao link da página atual quando sai.
-- **Hero (desktop).** Ao sair, a mandala sobe mais devagar do que a página (parallax com scrub, `yPercent`), e ganha uma rotação extra ligada ao scroll (somada ao loop CSS) e a data "23 E 24 JULHO" tem um ligeiro desfasamento.
+- **Hero (desktop).** Ao sair, a mandala sobe mais devagar do que a página (parallax com scrub, `yPercent`), e ganha uma rotação extra ligada ao scroll (somada ao loop CSS) e a data "30 E 31 JULHO" tem um ligeiro desfasamento.
 - **Faixa em movimento (desktop).** A inclinação segue a velocidade do scroll (até 6°) e volta a 0 quando o scroll para. Respeita o botão de pausa.
 - **Faixa de factos.** Os itens entram escalonados (16 px e opacidade); as divisórias desenham-se (escala 0 → 1, centradas).
 - **Cartaz.** Os nomes sobem por máscara, linha a linha, em grupo por dia; os pontos entre nomes aparecem depois.
