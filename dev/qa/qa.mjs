@@ -13,7 +13,8 @@
 //   seo                 robots, sitemap, llms e HTTP de cada página
 //   i18n                pt e en: HTTP, lang, hreflang recíprocos, canonical, seletor, sem texto pt nas páginas en, modal en (?lang=en)
 //   fallback            simulador desligado: com cache e sem cache (para o simulador, o que é reversível)
-//   sem-evento          produção sem TICKETT_EVENT_ID (servidor temporário, porta 8090): sem checkout, "em breve" em pt e en
+//   sem-evento          produção sem TICKETT_EVENT_ID e sem demonstração (servidor temporário, porta 8090): sem checkout, "em breve"
+//   demo                modo demonstração (evento 2133) com upstream de teste (fixture, porta 8092): avisos, noindex, robots, sem Offers, /checkout
 //   all                 tudo exceto fallback
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -1355,6 +1356,8 @@ async function semEvento() {
     r.check('JSON-LD da home sem Offers', !textos['/'].includes('"@type":"Offer"'));
     r.check('JSON-LD de /bilhetes sem Offers', !textos['/bilhetes'].includes('"@type":"Offer"'));
     r.check('llms.txt diz venda em breve', textos['/llms.txt'].includes('venda em breve'));
+    // Sem preços à venda, nenhuma página fala de taxas ("Acresce a taxa…").
+    r.check('sem evento: nenhuma página diz "Acresce a taxa"', !paginas.some((p) => textos[p].includes('Acresce a taxa')));
 
     // Qualquer aviso PHP ou tentativa de contacto à Tickett fica no log do servidor.
     await sleep(200);
@@ -1378,9 +1381,124 @@ async function esperarServidor(base, ms = 10000) {
   return false;
 }
 
+// ---------------------------------------------------------------- demonstração (tickett.demo, evento 2133)
+
+const PORTA_UPSTREAM = Number(process.env.QA_DEMO_UPSTREAM || 8092);
+const PORTA_DEMO = Number(process.env.QA_DEMO_PORTA || 8093);
+const PORTA_DEMO_COM_EVENTO = Number(process.env.QA_DEMO_EVENTO_PORTA || 8094);
+// Textos do site (app/Lang). O HTML escapa a apóstrofo da nota en como &#039;.
+const DEMO_FAIXA_PT = 'Demonstração: esta bilheteira é de outro evento e serve só para testar o site. Não faças compras.';
+const DEMO_FAIXA_EN = 'Demo: this box office belongs to another event and is only here to test the site. Do not buy anything.';
+const DEMO_NOTA_PT = 'Demonstração: bilhetes de outro evento, só para testar. Não faças compras.';
+const DEMO_NOTA_EN = 'Demo: another event&#039;s tickets, for testing only. Do not buy anything.';
+
+// Sobe um processo PHP com o ambiente dado. TMPDIR próprio: a cache da Tickett (sys_get_temp_dir) não se mistura com a real.
+function arrancarPhp(nome, porta, args, env) {
+  const tmp = path.join(OUT, 'tmp-' + nome);
+  fs.mkdirSync(tmp, { recursive: true });
+  const log = fs.openSync(path.join(OUT, `demo-${nome}.log`), 'w');
+  const proc = spawn('php', args, { cwd: PROJECT, env: { ...env, TMPDIR: tmp }, stdio: ['ignore', log, log] });
+  return { proc, log };
+}
+
+function ambienteSite(porta) {
+  const env = { ...process.env, VERCEL: '1', BASE_URL: `http://127.0.0.1:${porta}`, TICKETT_BASE: `http://127.0.0.1:${PORTA_UPSTREAM}` };
+  delete env.TICKETT_EVENT_ID;
+  delete env.TICKETT_DEMO;
+  delete env.SITE_ENV;
+  return env;
+}
+
+async function demo() {
+  const r = new Results('demo');
+  const upstream = `http://127.0.0.1:${PORTA_UPSTREAM}`;
+  const base = `http://127.0.0.1:${PORTA_DEMO}`;
+  const baseComEvento = `http://127.0.0.1:${PORTA_DEMO_COM_EVENTO}`;
+  for (const porta of [PORTA_UPSTREAM, PORTA_DEMO, PORTA_DEMO_COM_EVENTO]) {
+    if (await fetch(`http://127.0.0.1:${porta}/`).then(() => true).catch(() => false)) {
+      throw new Error(`a porta ${porta} já está em uso (QA_DEMO_*)`);
+    }
+  }
+
+  const processos = [];
+  const logs = [];
+  const ler = async (b, caminho) => {
+    const res = await fetch(b + caminho, { redirect: 'manual' });
+    return { status: res.status, html: await res.text() };
+  };
+  try {
+    // Upstream: o HTML guardado do 2133 faz de checkout da Tickett.
+    processos.push(arrancarPhp('upstream', PORTA_UPSTREAM, ['-S', `127.0.0.1:${PORTA_UPSTREAM}`, 'dev/tickett-parse-fixtures/servidor-upstream.php'], process.env));
+    // Produção (VERCEL=1), sem TICKETT_EVENT_ID: demonstração com o 2133.
+    processos.push(arrancarPhp('demo', PORTA_DEMO, ['-S', `127.0.0.1:${PORTA_DEMO}`, '-t', 'public', 'public/router-dev.php'], ambienteSite(PORTA_DEMO)));
+    // Mesmo ambiente com TICKETT_EVENT_ID definido: o evento é o dado e os avisos desaparecem.
+    processos.push(arrancarPhp('com-evento', PORTA_DEMO_COM_EVENTO, ['-S', `127.0.0.1:${PORTA_DEMO_COM_EVENTO}`, '-t', 'public', 'public/router-dev.php'],
+      { ...ambienteSite(PORTA_DEMO_COM_EVENTO), TICKETT_EVENT_ID: '2133' }));
+
+    const subiu = [await esperarServidor(upstream), await esperarServidor(base), await esperarServidor(baseComEvento)];
+    r.check('upstream, demonstração e com-evento respondem', subiu.every(Boolean), subiu.join(' '));
+    if (!subiu.every(Boolean)) return r.save();
+
+    // ---- modo demonstração
+    const paginas = ['/', '/en', '/bilhetes', '/en/tickets', '/cartaz', '/en/line-up'];
+    const pag = {};
+    for (const p of paginas) {
+      pag[p] = await ler(base, p);
+      r.check(`demo ${p} HTTP 200`, pag[p].status === 200, String(pag[p].status));
+      r.check(`demo ${p} noindex,nofollow`, pag[p].html.includes('<meta name="robots" content="noindex,nofollow">'));
+    }
+    r.check('demo /bilhetes: grelha com os bilhetes do 2133 (16038_1, 16039_1, 16040_1)',
+      ['16038_1', '16039_1', '16040_1'].every((id) => pag['/bilhetes'].html.includes(`data-product="${id}"`)));
+    r.check('demo /bilhetes: nome de um bilhete do 2133', pag['/bilhetes'].html.includes('Miramar/Gwenifer Raymond + Calcutá'));
+    r.check('demo /bilhetes: nota por cima da grelha (pt)', pag['/bilhetes'].html.includes('class="ticket-demo"') && pag['/bilhetes'].html.includes(DEMO_NOTA_PT));
+    r.check('demo /en/tickets: nota por cima da grelha (en)', pag['/en/tickets'].html.includes(DEMO_NOTA_EN));
+    r.check('demo /bilhetes: faixa de aviso no modal (pt)', pag['/bilhetes'].html.includes(DEMO_FAIXA_PT));
+    r.check('demo /en/tickets: faixa de aviso no modal (en)', pag['/en/tickets'].html.includes(DEMO_FAIXA_EN));
+    r.check('demo /bilhetes: botões de compra abrem o checkout', pag['/bilhetes'].html.includes('data-checkout-open'));
+    r.check('demo /: JSON-LD sem Offers', !pag['/'].html.includes('"@type":"Offer"') && pag['/'].html.includes('"@type":"MusicFestival"'));
+    r.check('demo /bilhetes: JSON-LD sem Offers', !pag['/bilhetes'].html.includes('"@type":"Offer"'));
+
+    const robots = await ler(base, '/robots.txt');
+    r.check('demo robots.txt: Disallow: /', robots.html.trim() === 'User-agent: *\nDisallow: /', JSON.stringify(robots.html.slice(0, 80)));
+
+    const checkout = await ler(base, '/checkout');
+    r.check('demo /checkout HTTP 200 (página proxied)', checkout.status === 200, String(checkout.status));
+    r.check('demo /checkout com o tema do site (fj-checkout-tema)', checkout.html.includes('fj-checkout-tema'));
+    r.check('demo /checkout: página do evento 2133', checkout.html.includes('Guitarras ao Alto no Crato'));
+
+    // ---- com TICKETT_EVENT_ID: sem avisos
+    const comEvento = {};
+    for (const p of ['/', '/bilhetes', '/en/tickets']) {
+      comEvento[p] = await ler(baseComEvento, p);
+      r.check(`com evento ${p} HTTP 200`, comEvento[p].status === 200, String(comEvento[p].status));
+    }
+    r.check('com evento: sem faixa nem nota de demonstração', !['/bilhetes', '/en/tickets'].some((p) =>
+      comEvento[p].html.includes('fj-checkout__demo') || comEvento[p].html.includes('ticket-demo')));
+    r.check('com evento: sem noindex', !comEvento['/'].html.includes('noindex'));
+    r.check('com evento: JSON-LD com Offers', comEvento['/'].html.includes('"@type":"Offer"'));
+    const robotsCom = await ler(baseComEvento, '/robots.txt');
+    r.check('com evento robots.txt: sem Disallow: /', !robotsCom.html.includes('Disallow: /\n') && !/^Disallow: \/$/m.test(robotsCom.html));
+  } finally {
+    for (const { proc, log } of processos) {
+      proc.kill('SIGTERM');
+      fs.closeSync(log);
+    }
+  }
+
+  // Avisos PHP ou contacto indevido ficam no log de cada servidor.
+  await sleep(200);
+  for (const nome of ['demo', 'com-evento']) {
+    const problemas = fs.readFileSync(path.join(OUT, `demo-${nome}.log`), 'utf8').split('\n')
+      .filter((l) => /PHP (Warning|Notice|Fatal|Deprecated)|TickettService|Texto em falta|Erro/i.test(l));
+    r.check(`${nome}: sem avisos PHP no log`, problemas.length === 0, problemas.slice(0, 3).join(' | '));
+  }
+
+  return r.save();
+}
+
 // ---------------------------------------------------------------- main
 
-const commands = { compra, escolher, 'checkout-layout': checkoutLayout, a11y, teclado, movimento, semjs, overflow, desempenho, seo, i18n, fallback, 'sem-evento': semEvento };
+const commands = { compra, escolher, 'checkout-layout': checkoutLayout, a11y, teclado, movimento, semjs, overflow, desempenho, seo, i18n, fallback, 'sem-evento': semEvento, demo };
 const [cmd, arg] = process.argv.slice(2);
 
 async function main() {
@@ -1393,7 +1511,7 @@ async function main() {
   }
   if (cmd === 'all') {
     let fails = 0;
-    for (const name of ['compra', 'escolher', 'checkout-layout', 'a11y', 'teclado', 'movimento', 'semjs', 'overflow', 'desempenho', 'seo', 'i18n', 'sem-evento']) {
+    for (const name of ['compra', 'escolher', 'checkout-layout', 'a11y', 'teclado', 'movimento', 'semjs', 'overflow', 'desempenho', 'seo', 'i18n', 'sem-evento', 'demo']) {
       fails += name === 'compra' ? await compra(WIDTHS.desktop) + await compra(WIDTHS.mobile) : await commands[name]();
     }
     return fails;

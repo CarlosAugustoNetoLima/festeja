@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?php if (\App\Services\TickettService::emDemo(config('tickett'))): ?>
+  <meta name="robots" content="noindex,nofollow">
+  <?php endif; ?>
   <script>document.documentElement.classList.replace('no-js', 'js');</script>
   <title><?= e($title) ?></title>
   <meta name="description" content="<?= e($description) ?>">

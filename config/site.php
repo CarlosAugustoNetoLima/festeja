@@ -5,6 +5,9 @@ declare(strict_types=1);
 // Na Vercel, o runtime define VERCEL. Sem variáveis de ambiente, o site corre em produção contra a Tickett real.
 $naVercel = getenv('VERCEL') !== false;
 $producao = $naVercel || getenv('SITE_ENV') === 'prod';
+// Modo demonstração (tickett.demo): sem evento Festeja na Tickett, a produção usa este evento real só para simular a
+// bilheteira. Os avisos de demonstração aparecem no site (ver docs/guia-de-manutencao.md, 16.1).
+$idDemonstracao = 2133;
 
 $config = [
   'env' => $naVercel ? 'prod' : 'dev',                    // 'prod' em produção
@@ -13,9 +16,10 @@ $config = [
   'tickett' => [
     // Checkout da Tickett tal como está publicado (não é alterado). O site faz de proxy em /checkout.
     'base' => $naVercel ? 'https://checkout.lebillet.eu' : 'http://127.0.0.1:8081',   // produção: https://checkout.lebillet.eu
-    // 2001 é só do simulador (dev). Em produção não há evento por defeito: na Tickett real o 2001 é outro evento.
-    // Sem TICKETT_EVENT_ID (dígitos) o site não vende: mostra "venda em breve" e não contacta a Tickett.
-    'event_id' => $producao ? null : 2001,
+    // 2001 é só do simulador (dev). Na Tickett real o 2001 é outro evento: em produção o evento vem de
+    // TICKETT_EVENT_ID (dígitos) ou, sem ele, do evento de demonstração (ver acima).
+    'event_id' => $producao ? $idDemonstracao : 2001,
+    'demo' => false,
     'cache_ttl' => 300,
     'timeout' => 3,
   ],
@@ -54,9 +58,18 @@ if ($baseUrl !== null) {
 if ($variavel('TICKETT_BASE') !== null) {
     $config['tickett']['base'] = $variavel('TICKETT_BASE');
 }
-if (ctype_digit($variavel('TICKETT_EVENT_ID') ?? '')) {
+$eventoDefinido = ctype_digit($variavel('TICKETT_EVENT_ID') ?? '');
+if ($eventoDefinido) {
     $config['tickett']['event_id'] = (int) $variavel('TICKETT_EVENT_ID');
 }
+// TICKETT_DEMO=0 desliga a demonstração (sem TICKETT_EVENT_ID em produção, não há evento: "venda em breve").
+// TICKETT_DEMO=1 liga-a também com TICKETT_EVENT_ID definido.
+$demoVariavel = $variavel('TICKETT_DEMO');
+if (!$eventoDefinido && $producao) {
+    $config['tickett']['event_id'] = $demoVariavel === '0' ? null : $idDemonstracao;
+}
+$demo = $demoVariavel === '1' || (!$eventoDefinido && $producao && $demoVariavel !== '0');
+$config['tickett']['demo'] = $demo && $config['tickett']['event_id'] !== null;
 if ($variavel('GA4_ID') !== null) {
     $config['analytics']['ga4_id'] = $variavel('GA4_ID');
 }

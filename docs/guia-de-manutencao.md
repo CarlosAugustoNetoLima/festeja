@@ -437,7 +437,7 @@ Cria `config/site.local.php` a partir de `config/site.local.example.php` (este f
 ],
 ```
 
-O `2001` é um valor provisório. Depois de mudares o ID:
+O `2001` é só para o simulador de dev (`127.0.0.1:8081`). Em produção o evento vem de `TICKETT_EVENT_ID` (secção 16.1) ou, sem ele, do modo demonstração (2133). Depois de mudares o ID:
 
 - Na Tickett, o evento com esse ID tem de existir com bilhetes na página pública.
 - O site cria um novo ficheiro de cache com o novo ID.
@@ -852,13 +852,13 @@ Checklist:
      'base_url' => 'https://festeja.pt',
      'tickett' => [
        'base' => 'https://checkout.lebillet.eu',
-       'event_id' => 2001,   // confirmar o ID real
+       // event_id: não se põe aqui. Vem de TICKETT_EVENT_ID (secção 16.1); sem ele, o modo demonstração (2133).
      ],
      'analytics' => ['ga4_id' => null],
    ];
    ```
 
-   O `event_id` `2001` é provisório. Confirma-o com a Tickett.
+   Em produção o evento vem da variável `TICKETT_EVENT_ID` (secção 16.1), não deste ficheiro. O `2001` é só do simulador de dev.
 
 2. **Efeitos de `env` = `prod`.** A página `/kit` responde 404. A faixa "Rascunho" das páginas legais não aparece. Um componente em falta não dá erro visível: escreve no log e fica vazio.
 
@@ -889,15 +889,29 @@ O site corre na Vercel com o runtime comunitário `vercel-php@0.9.0` (PHP 8.5). 
 - `.vercelignore` deixa de fora `dev/`, `docs/`, `design-system/`, `bin/`, `extraido-pdf/`, os `*.md` e `storage/cache/*`. O que entra é `api/`, `app/`, `config/`, `content/`, `public/` e `vercel.json`.
 - O sistema de ficheiros da Vercel é só de leitura, exceto `/tmp`. Por isso a cache da Tickett vai para `sys_get_temp_dir()/festeja-cache` quando a variável `VERCEL` está definida ou quando `storage/cache` não é gravável (`TickettService::cacheDir()`). O site não grava mais nada em disco. Os erros vão para o log do runtime.
 
-**Variáveis de ambiente** (Settings > Environment Variables do projeto). Sem nenhuma, o site arranca em produção, com a Tickett real e **sem evento**. `TICKETT_EVENT_ID` é obrigatório para vender: sem ele o site mostra "venda em breve" (e o botão do Instagram), não contacta a Tickett e não tem checkout (`/checkout` responde 404). O 2001 é só do simulador de dev; na Tickett real é outro evento.
+**Variáveis de ambiente** (Settings > Environment Variables do projeto). Sem nenhuma, o site arranca em produção em **modo demonstração**: mostra os bilhetes do evento **2133** (Guitarras ao Alto no Crato, na Tickett real) só para testar a bilheteira, com avisos em todo o site. `TICKETT_EVENT_ID` é obrigatório para vender: com ele, o site usa o evento real e o modo demonstração desliga-se. Sem `TICKETT_EVENT_ID` nem demonstração (`TICKETT_DEMO=0`), o site mostra "venda em breve" (e o botão do Instagram), não contacta a Tickett e não tem checkout (`/checkout` responde 404). O 2001 é só do simulador de dev (`127.0.0.1:8081`); na Tickett real é outro evento.
 
 | Variável | Predefinido na Vercel | Para que serve |
 |---|---|---|
 | `SITE_ENV` | `prod` | `dev` ou `prod`. Em `prod`, `/kit` responde 404 e a faixa "Rascunho" das páginas legais não aparece. |
 | `BASE_URL` | `https://` + `VERCEL_PROJECT_PRODUCTION_URL` (ou o `Host` do pedido) | Domínio público: canonical, sitemap, JSON-LD. Com domínio próprio, define-a. |
 | `TICKETT_BASE` | `https://checkout.lebillet.eu` | Checkout da Tickett. |
-| `TICKETT_EVENT_ID` | vazio (sem venda) | ID do evento, só dígitos. **Obrigatório para vender:** sem ele o site mostra "venda em breve". Confirmar o ID com a Tickett. |
+| `TICKETT_EVENT_ID` | vazio (modo demonstração, evento 2133) | ID do evento real, só dígitos. **Obrigatório para vender:** com ele, o modo demonstração desliga. Confirmar o ID com a Tickett. |
+| `TICKETT_DEMO` | vazio | `0` desliga a demonstração (sem `TICKETT_EVENT_ID`, não há evento: "venda em breve"). `1` liga-a também com `TICKETT_EVENT_ID` definido. |
 | `GA4_ID` | vazio | Sem efeito por agora. Ver a secção 13. |
+
+**Modo demonstração (evento 2133)**
+
+Enquanto não há evento Festeja na Tickett, a produção usa o evento **2133** ("Guitarras ao Alto no Crato", 11 a 13 de dezembro de 2026, checkout real da Tickett) para a bilheteira abrir na Vercel. É um evento de outra organização, por isso:
+
+- Na faixa do modal do checkout e por cima da grelha aparece um aviso (pt e en): "Demonstração: esta bilheteira é de outro evento…".
+- Todo o site tem `noindex,nofollow`, e o `robots.txt` diz `Disallow: /`.
+- O JSON-LD não tem `Offers`: não se anunciam preços de outro evento como sendo do Festeja.
+- Os bilhetes e preços do 2133 aparecem na grelha, que é o objetivo da simulação.
+
+**Como desligar:** define `TICKETT_EVENT_ID` na Vercel com o ID do evento real (só dígitos). Com ele, o site usa esse evento, sem avisos e com indexação normal. Para ficar sem evento em vez de demonstração, define `TICKETT_DEMO=0` (volta a "venda em breve").
+
+O 2133 e o seu HTML de teste estão em `dev/tickett-parse-fixtures/`. `node dev/qa/qa.mjs demo` verifica este modo contra esse HTML, sem tocar na Tickett.
 
 Não há segredos no repositório. Se algum passar a existir, vai como variável da Vercel.
 
@@ -1206,7 +1220,7 @@ Estes pontos são provisórios. Não os deixes assim em produção.
 | Padrão geométrico do fundo | Fora do site | Falta o vetor original |
 | Fotografias de artistas | `artistas.json` (`foto`) | Todas `null`. Os cartões mostram um fundo liso com um símbolo da marca |
 | Imagem de partilha | `public/assets/img/og.jpg` | Gerado por `dev/og/build.mjs` a partir de `festival.json`. Rever a composição com a data final |
-| ID do evento | `config/site.php` (`event_id: 2001`) | Provisório |
+| ID do evento | variável `TICKETT_EVENT_ID` (secção 16.1) | Sem ela, produção usa o modo demonstração (evento 2133). Confirmar o ID real com a Tickett |
 | Domínio do checkout | `config/site.local.php` (`tickett.base`) | Produção: `https://checkout.lebillet.eu`. Confirmar com a Tickett |
 | Parser e proxy | `TickettService.php`, `CheckoutProxy.php` | Dependem do HTML atual da Tickett. Testar o evento real (parse-check e compra de teste) |
 | Pagamentos com redirecionamento externo | Checkout (Tickett) | Viva Wallet, myPOS, PayPal, PicPay, PIX e 3DS: testar um a um com pagamento real. Saem do proxy |

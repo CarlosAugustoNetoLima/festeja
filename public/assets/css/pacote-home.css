@@ -507,6 +507,9 @@ body { margin: 0; background: var(--surface); color: var(--ink); font-family: va
   .fj-checkout { animation: none; }
 }
 
+/* Aviso de demonstração (tickett.demo): faixa por cima do iframe, sempre visível. Ver CheckoutModal.php. */
+.fj-checkout__demo { margin: 0; padding: var(--space-3) var(--space-6); background: var(--danger); color: var(--surface); font-weight: 700; }
+
 /* ---- site.css ---- */
 /* Festeja — shell do site (cabeçalho, menu, rodapé) e componentes de página. Mobile first: 768px e 1024px.
    Valores vêm de tokens.css; composição de componentes em components.css. Overrides de fj- estão marcados. */
@@ -1976,6 +1979,9 @@ main .fj-artist__name a:not([class]) {
     animation: none;
   }
 }
+
+/* Nota de demonstração por cima da grelha de bilhetes (tickett.demo). Ver TicketGrid.php. */
+.ticket-demo { margin: 0 0 var(--space-4); padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); background: var(--danger); color: var(--surface); font-weight: 700; }
 
 /* ---- home.css ---- */
 /* Página inicial (app/Views/Pages/home.php e componentes Home*). Mobile first: 1024px é o desktop.

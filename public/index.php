@@ -71,7 +71,9 @@ function metaDescription(string $page, ?string $slug, array $festival, array $ar
 
     switch ($page) {
         case 'bilhetes':
-            return t('meta.bilhetes', ['nome' => $nome, 'datas' => $datas, 'local' => $local]);
+            // A taxa só se menciona com preços à venda (sem evento, a descrição não fala de taxas).
+            $taxa = (new TickettService(config('tickett')))->minPrice() !== null ? t('taxa.acresce_meta') : '';
+            return t('meta.bilhetes', ['nome' => $nome, 'datas' => $datas, 'local' => $local, 'taxa' => $taxa]);
 
         case 'cartaz':
             $destaques = array_values(array_map(

@@ -32,6 +32,9 @@ $textos = [
         <?= \App\Helpers\Icon::svg('x') ?>
       </button>
     </div>
+    <?php if (\App\Services\TickettService::emDemo(config('tickett'))): ?>
+    <p class="fj-checkout__demo" role="note"><?= e(t('demo.faixa')) ?></p>
+    <?php endif; ?>
     <div class="fj-modal__body fj-checkout__body">
       <p class="fj-checkout__status" role="status" data-checkout-loading><?= e(t('checkout.a_carregar')) ?></p>
       <p class="fj-checkout__alert" role="alert" data-checkout-alert hidden><?= e(t('checkout.demora')) ?> <a href="<?= e($checkoutUrl) ?>" target="_blank" rel="noopener"><?= e(t('checkout.nova_pagina')) ?></a></p>

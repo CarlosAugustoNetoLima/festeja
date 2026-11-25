@@ -36,3 +36,6 @@
   .fj-modal-backdrop,
   .fj-checkout { animation: none; }
 }
+
+/* Aviso de demonstração (tickett.demo): faixa por cima do iframe, sempre visível. Ver CheckoutModal.php. */
+.fj-checkout__demo { margin: 0; padding: var(--space-3) var(--space-6); background: var(--danger); color: var(--surface); font-weight: 700; }

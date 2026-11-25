@@ -25,6 +25,7 @@ node dev/qa/qa.mjs seo             # robots, sitemap, llms e HTTP de cada págin
 node dev/qa/qa.mjs i18n            # pt e en: HTTP, lang, hreflang recíprocos, canonical, seletor, texto pt nas páginas en, modal en (?lang=en)
 node dev/qa/qa.mjs fallback        # simulador desligado: com cache e sem cache (ver abaixo)
 node dev/qa/qa.mjs sem-evento      # produção sem TICKETT_EVENT_ID (SITE_ENV=prod, TICKETT_DEMO=0): servidor temporário na porta 8090; sem checkout, "em breve" em pt e en
+node dev/qa/qa.mjs demo              # modo demonstração (evento 2133) contra um upstream de teste com o HTML guardado (portas 8092-8094): avisos, noindex, robots, sem Offers, /checkout
 node dev/qa/qa.mjs all             # tudo, exceto fallback
 ```
 
@@ -42,6 +43,7 @@ Cada verificação imprime `PASS` ou `FAIL`. No fim sai com código 1 se houver 
 | `QA_CHROME` | Google Chrome em `/Applications` | binário do Chrome |
 | `QA_PROJECT` | duas pastas acima de `dev/qa/` | raiz do projeto (cache e simulador) |
 | `QA_SEM_EVENTO_PORTA` | `8090` | porta do servidor temporário de `sem-evento` |
+| `QA_DEMO_UPSTREAM`, `QA_DEMO_PORTA`, `QA_DEMO_EVENTO_PORTA` | `8092`, `8093`, `8094` | portas do upstream de teste e dos dois servidores de `demo` |
 
 ## Fallback (simulador desligado)
 

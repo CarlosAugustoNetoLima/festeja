@@ -41,6 +41,9 @@ if ($semEvento) {
 }
 ?>
 <?php if ($mensagem === null): ?>
+<?php if (TickettService::emDemo(config('tickett'))): ?>
+<p class="ticket-demo" role="note"><?= e(t('demo.nota')) ?></p>
+<?php endif; ?>
 <ul class="ticket-grid" role="list" data-mov="escalonar" data-mov-estilo="sticker">
   <?php foreach ($products as $product): ?>
   <?= Component::render('TicketCard', ['product' => $product, 'checkoutUrl' => $checkoutUrl]) ?>

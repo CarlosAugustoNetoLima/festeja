@@ -22,7 +22,8 @@ $grupoBilhetes = array_values(array_filter(
       'items' => [['label' => t('nav.inicio'), 'href' => Rotas::url('inicio')], ['label' => t('nav.bilhetes')]],
       'eyebrow' => t('nav.bilhetes'),
       'title' => t('bilhetes.titulo', ['edicao' => $festival['edicao']]),
-      'lead' => t('bilhetes.lead') . ' ' . ($tickett->taxaIncluida() ? t('bilhetes.taxas_incluidas') : t('taxa.acresce_longa')),
+      // A linha de taxas só fala de preços: sem preços à venda (sem evento, ou venda por abrir) não aparece.
+      'lead' => t('bilhetes.lead') . ($tickett->minPrice() === null ? '' : ' ' . ($tickett->taxaIncluida() ? t('bilhetes.taxas_incluidas') : t('taxa.acresce_longa'))),
   ]) ?>
 
   <section class="section" data-theme="noite" id="bilhetes" aria-labelledby="bilhetes-titulo">

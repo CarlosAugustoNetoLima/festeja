@@ -22,6 +22,13 @@ final class TickettService
     /** Cada bilhete é uma tabela ticket-box, dentro do bloco. */
     private const XPATH_CAIXA = ".//table[contains(concat(' ', normalize-space(@class), ' '), ' ticket-box ')]";
 
+    /**
+     * Marcação de tabela (group.volt, ex.: evento 2133): cada bilhete é uma linha tr.tr-products dentro de
+     * table.table-product, com o nome no h6 que a antecede. Só se usa quando não há caixas ticket-box.
+     */
+    private const XPATH_LINHA_TABELA = ".//table[contains(concat(' ', normalize-space(@class), ' '), ' table-product ')]"
+        . "//tr[contains(concat(' ', normalize-space(@class), ' '), ' tr-products ')]";
+
     /** Resultado de getCatalog() por event_id e idioma, para não repetir pedidos no mesmo pedido HTTP. */
     private static array $catalogos = [];
 
@@ -38,6 +45,14 @@ final class TickettService
     public static function temEvento(array $cfg): bool
     {
         return (int) ($cfg['event_id'] ?? 0) > 0;
+    }
+
+    /**
+     * true se o site está em modo demonstração: mostra o evento de tickett.demo (de outro evento) e avisa disso.
+     */
+    public static function emDemo(array $cfg): bool
+    {
+        return !empty($cfg['demo']) && self::temEvento($cfg);
     }
 
     /**
@@ -130,6 +145,10 @@ final class TickettService
      */
     public function minPrice(): ?float
     {
+        // Em demonstração os preços são de outro evento: só a grelha (com aviso) os mostra.
+        if (self::emDemo($this->cfg)) {
+            return null;
+        }
         $prices = [];
         foreach ($this->getCatalog()['products'] as $product) {
             $valor = $product['total'] ?? $product['price'];
@@ -296,10 +315,20 @@ final class TickettService
         }
 
         $produtos = [];
-        foreach ($xpath->query(self::XPATH_CAIXA, $bloco) as $caixa) {
-            $produto = $this->parseProduto($xpath, $caixa, count($produtos));
-            if ($produto !== null) {
-                $produtos[] = $produto;
+        $caixas = $xpath->query(self::XPATH_CAIXA, $bloco);
+        if ($caixas->length > 0) {
+            foreach ($caixas as $caixa) {
+                $produto = $this->parseProduto($xpath, $caixa, count($produtos));
+                if ($produto !== null) {
+                    $produtos[] = $produto;
+                }
+            }
+        } else {
+            foreach ($xpath->query(self::XPATH_LINHA_TABELA, $bloco) as $linha) {
+                $produto = $this->parseProdutoTabela($xpath, $linha, count($produtos));
+                if ($produto !== null) {
+                    $produtos[] = $produto;
+                }
             }
         }
 
@@ -345,28 +374,67 @@ final class TickettService
             return null;
         }
 
-        // O nome é o texto do h5 sem o <small> (a descrição).
-        $nome = '';
-        foreach ($h5->childNodes as $no) {
-            if ($no->nodeType === XML_TEXT_NODE) {
-                $nome .= $no->nodeValue;
-            }
-        }
-        $nome = $this->texto($nome);
+        $nome = $this->nomeDoTitulo($h5);
         if ($nome === '') {
             error_log('TickettService: bilhete sem nome, ignorado');
             return null;
         }
 
-        $descricaoNo = $xpath->query('.//small', $h5)->item(0);
-        $descricao = $descricaoNo !== null ? $this->texto($descricaoNo->textContent) : '';
-
-        $rotuloLote = $this->texto($celulas->item(0)->textContent);
-        $lote = $this->lote($rotuloLote) ?? $this->lote($nome) ?? ($rotuloLote !== '' ? ['number' => null, 'name' => $rotuloLote] : null);
-
         $linhaPreco = $celulas->item(1);
-        $textoPreco = $this->texto($linhaPreco->textContent);
         $select = $xpath->query('.//select[contains(@class, "quantity-select")]', $linhaPreco)->item(0);
+
+        return $this->montarProduto(
+            $nome,
+            $this->descricaoDoTitulo($xpath, $h5),
+            $this->texto($celulas->item(0)->textContent),
+            $this->texto($linhaPreco->textContent),
+            $this->texto($linhaPreco->textContent),
+            $select,
+            $ordem
+        );
+    }
+
+    /**
+     * Um bilhete da marcação de tabela (group.volt, ex.: evento 2133). A linha tr.tr-products traz o lote (1.ª célula),
+     * o preço (2.ª) e o select; o nome e a descrição estão no h6 que a antecede (linha de título da tabela).
+     * Sem select, o estado sai da linha inteira (esgotado ou em breve).
+     */
+    private function parseProdutoTabela(\DOMXPath $xpath, \DOMElement $linha, int $ordem): ?array
+    {
+        $h6 = $xpath->query('preceding::h6[1]', $linha)->item(0);
+        $celulas = $xpath->query('./td', $linha);
+        if (!$h6 instanceof \DOMElement || $celulas->length < 2) {
+            error_log('TickettService: linha de bilhete sem h6 ou sem preço, ignorada');
+            return null;
+        }
+
+        $nome = $this->nomeDoTitulo($h6);
+        if ($nome === '') {
+            error_log('TickettService: bilhete sem nome (h6), ignorado');
+            return null;
+        }
+
+        $select = $xpath->query('.//select[contains(@class, "quantity-select")]', $linha)->item(0);
+
+        return $this->montarProduto(
+            $nome,
+            $this->descricaoDoTitulo($xpath, $h6),
+            $this->texto($celulas->item(0)->textContent),
+            $this->texto($celulas->item(1)->textContent),
+            $this->texto($linha->textContent),
+            $select,
+            $ordem
+        );
+    }
+
+    /**
+     * Cauda comum às duas marcações: lote, preço, id e ?produto= (com select) ou o estado sem seletor.
+     * $textoEstado é o texto onde procurar "em breve" quando não há select. Devolve null se o select ou o preço
+     * não forem os esperados.
+     */
+    private function montarProduto(string $nome, string $descricao, string $rotuloLote, string $textoPreco, string $textoEstado, ?\DOMNode $select, int $ordem): ?array
+    {
+        $lote = $this->lote($rotuloLote) ?? $this->lote($nome) ?? ($rotuloLote !== '' ? ['number' => null, 'name' => $rotuloLote] : null);
 
         $id = null;
         $produto = null;
@@ -389,7 +457,7 @@ final class TickettService
             $produto = $m[1] . '_' . $m[2];
             $status = 'available';
             $urlBilhete .= '?' . http_build_query(['produto' => $produto]);
-        } elseif ($this->estadoSemSeletor($textoPreco) === 'upcoming') {
+        } elseif ($this->estadoSemSeletor($textoEstado) === 'upcoming') {
             $status = 'upcoming';
         }
 
@@ -412,6 +480,24 @@ final class TickettService
             'sort' => $ordem,
             'checkout_url' => $urlBilhete,
         ];
+    }
+
+    /** Texto do título sem o <small> (a descrição). */
+    private function nomeDoTitulo(\DOMElement $titulo): string
+    {
+        $nome = '';
+        foreach ($titulo->childNodes as $no) {
+            if ($no->nodeType === XML_TEXT_NODE) {
+                $nome .= $no->nodeValue;
+            }
+        }
+        return $this->texto($nome);
+    }
+
+    private function descricaoDoTitulo(\DOMXPath $xpath, \DOMElement $titulo): string
+    {
+        $descricaoNo = $xpath->query('.//small', $titulo)->item(0);
+        return $descricaoNo !== null ? $this->texto($descricaoNo->textContent) : '';
     }
 
     /**

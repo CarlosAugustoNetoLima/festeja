@@ -91,8 +91,48 @@ foreach ($esperados as $i => $esperado) {
 $confere($catalogo['event']['sale']['status'] === 'open', 'venda aberta (sale.status = open)');
 $confere($catalogo['event']['name'] === 'Festival Festeja 2027', 'nome do evento vindo do <title>');
 
+// Marcação de tabela (group.volt, ex.: evento 2133). Lê o HTML guardado em dev/tickett-parse-fixtures/, sem rede.
+$leitor = new ReflectionMethod(TickettService::class, 'parseCatalogo');
+$fixture = ROOT . '/dev/tickett-parse-fixtures/tickett-2133.html';
+$lido = $leitor->invoke($servico, (string) file_get_contents($fixture));
+$confere($lido !== null, 'fixture 2133: bloco de bilhetes encontrado');
+$produtosFixture = $lido['products'] ?? [];
+$confere($lido['event']['name'] === 'Guitarras ao Alto no Crato', 'fixture 2133: nome do evento vindo do <title>');
+$confere($lido['event']['sale']['status'] === 'open', 'fixture 2133: venda aberta');
+$confere(count($produtosFixture) === 3, 'fixture 2133: 3 bilhetes (' . count($produtosFixture) . ')');
+$esperadosFixture = [
+    ['16038_1', '11/12 - Miramar + Gwenifer Raymond / Mosteiro Flor da Rosa.', 'Ínicio do evento às 21h00', 6.0],
+    ['16039_1', '12/12 Calcutá / Igreja de Santo António', 'Ínicio do evento as 21h30', 6.0],
+    ['16040_1', 'Miramar/Gwenifer Raymond + Calcutá', '1 Bilhete = 2 Concertos', 10.0],
+];
+foreach ($esperadosFixture as $i => [$produto, $nome, $descricao, $preco]) {
+    $obtido = $produtosFixture[$i] ?? [];
+    $rotulo = "fixture 2133 bilhete {$i} ({$produto})";
+    $confere(($obtido['produto'] ?? null) === $produto, "{$rotulo}: produto (?produto=) " . var_export($obtido['produto'] ?? null, true));
+    $confere(($obtido['name'] ?? null) === $nome, "{$rotulo}: nome");
+    $confere(($obtido['description'] ?? null) === $descricao, "{$rotulo}: descrição");
+    $confere(($obtido['price'] ?? null) === $preco, "{$rotulo}: preço " . var_export($obtido['price'] ?? null, true));
+    $confere(($obtido['status'] ?? null) === 'available', "{$rotulo}: disponível");
+    $confere(($obtido['batch']['name'] ?? null) === 'Lote 1', "{$rotulo}: lote " . var_export($obtido['batch']['name'] ?? null, true));
+    $confere(str_ends_with($obtido['checkout_url'] ?? '', '?produto=' . $produto), "{$rotulo}: link com ?produto=");
+}
+
+// Esgotado e em breve no mesmo formato. Sintético (não há exemplo ao vivo): a célula sem select traz só a mensagem
+// (group.volt, bloco "soldout" / product['msg']).
+$sintetico = '<html><head><title>Evento de teste | x</title></head><body><div id="tickets-form-products"><table class="table table-product"><tbody>'
+    . '<tr class="table-tr-no-hover"><td><h6>Bilhete esgotado <small><br>Desc A</small></h6></td></tr>'
+    . '<tr class="tr-products"><td>Lote 1</td><td>€ 5,00</td><td><small>Esgotado</small></td></tr>'
+    . '<tr class="table-tr-no-hover"><td><h6>Bilhete em breve <small><br>Desc B</small></h6></td></tr>'
+    . '<tr class="tr-products"><td>Lote 2</td><td>€ 9,00</td><td><small>Em breve</small></td></tr>'
+    . '</tbody></table></div></body></html>';
+$sint = $leitor->invoke($servico, $sintetico);
+$a = $sint['products'][0] ?? [];
+$b = $sint['products'][1] ?? [];
+$confere(($a['status'] ?? null) === 'sold_out' && array_key_exists('price', $a) && $a['price'] === null && array_key_exists('id', $a) && $a['id'] === null, 'tabela sintética: bilhete esgotado sem preço nem id');
+$confere(($b['status'] ?? null) === 'upcoming' && ($b['batch']['number'] ?? null) === 2, 'tabela sintética: bilhete "em breve" com lote 2');
+
 if ($falhas > 0) {
     echo "\n{$falhas} falha(s).\n";
     exit(1);
 }
-echo "\nTudo confere com o simulador.\n";
+echo "\nTudo confere (simulador, fixture 2133 e tabela sintética).\n";

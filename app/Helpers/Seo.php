@@ -147,6 +147,11 @@ final class Seo
      */
     public static function robots(): string
     {
+        // Em modo demonstração nada é indexado: o site mostra bilhetes de outro evento.
+        if (TickettService::emDemo(config('tickett'))) {
+            return "User-agent: *\nDisallow: /\n";
+        }
+
         $linhas = ['User-agent: *', 'Allow: /', 'Disallow: /kit', 'Disallow: /checkout', ''];
         foreach (self::BOTS_IA as $bot) {
             $linhas[] = 'User-agent: ' . $bot;
@@ -367,6 +372,10 @@ final class Seo
 
     private static function offers(array $catalog): array
     {
+        // Em modo demonstração não se anunciam preços de outro evento como sendo do Festeja.
+        if (TickettService::emDemo(config('tickett'))) {
+            return [];
+        }
         if (($catalog['ok'] ?? false) !== true || !is_array($catalog['products'] ?? null)) {
             return [];
         }
