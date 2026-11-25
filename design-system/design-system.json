@@ -1,0 +1,227 @@
+{
+ "v": 3,
+ "layout": "files",
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-24T16:32:01Z"
+ },
+ "title": "Festeja",
+ "namespace": "Festeja",
+ "libraries": [],
+ "sections": {},
+ "groups": [
+  "Logos",
+  "Simbolos"
+ ],
+ "assetGroups": {
+  "Logos": {
+   "name": "Logos",
+   "tile": "l",
+   "order": [
+    "logo-vertical.svg",
+    "logo-horizontal.svg"
+   ],
+   "files": {
+    "logo-vertical.svg": {
+     "name": "logo-vertical.svg",
+     "blob": "bf6958635d5c545816daa756689e4e8f",
+     "size": 157806,
+     "type": "image/svg+xml"
+    },
+    "logo-horizontal.svg": {
+     "name": "logo-horizontal.svg",
+     "blob": "9d52fd29160e98c58829e30628ba1a6a",
+     "size": 72481,
+     "type": "image/svg+xml"
+    }
+   }
+  },
+  "Simbolos": {
+   "name": "Simbolos",
+   "tile": "s",
+   "order": [
+    "icone-01.svg",
+    "icone-02.svg",
+    "icone-03.svg",
+    "icone-04.svg",
+    "icone-05.svg",
+    "icone-06.svg",
+    "icone-07.svg",
+    "icone-08.svg",
+    "icone-09.svg",
+    "icone-10.svg",
+    "icone-11.svg",
+    "icone-12.svg",
+    "icone-13.svg",
+    "icone-14.svg",
+    "icone-15.svg",
+    "icone-16.svg",
+    "icone-17.svg",
+    "icone-18.svg",
+    "icone-19.svg",
+    "icone-20.svg",
+    "icone-21.svg",
+    "icone-22.svg",
+    "icone-23.svg",
+    "icone-24.svg"
+   ],
+   "files": {
+    "icone-01.svg": {
+     "name": "icone-01.svg",
+     "blob": "ba499cefd5b5d23defa2f58e79842f39",
+     "size": 7937,
+     "type": "image/svg+xml"
+    },
+    "icone-02.svg": {
+     "name": "icone-02.svg",
+     "blob": "6cd6d5c758b6b7a5a10d487915ddcad8",
+     "size": 5006,
+     "type": "image/svg+xml"
+    },
+    "icone-03.svg": {
+     "name": "icone-03.svg",
+     "blob": "71f4e7a7a8f2418f6d790339499df72c",
+     "size": 7763,
+     "type": "image/svg+xml"
+    },
+    "icone-04.svg": {
+     "name": "icone-04.svg",
+     "blob": "4ff6278734ba0b9020e773ea7c1534c4",
+     "size": 5300,
+     "type": "image/svg+xml"
+    },
+    "icone-05.svg": {
+     "name": "icone-05.svg",
+     "blob": "342f4074cba7d981942cdc34e703a945",
+     "size": 4673,
+     "type": "image/svg+xml"
+    },
+    "icone-06.svg": {
+     "name": "icone-06.svg",
+     "blob": "ed9402cc6aea19db2cc492ade759a123",
+     "size": 5152,
+     "type": "image/svg+xml"
+    },
+    "icone-07.svg": {
+     "name": "icone-07.svg",
+     "blob": "340b03f65cb03c8baac14f672d284110",
+     "size": 3801,
+     "type": "image/svg+xml"
+    },
+    "icone-08.svg": {
+     "name": "icone-08.svg",
+     "blob": "e1da40cc1f41e2cfc81b85debc50163b",
+     "size": 6026,
+     "type": "image/svg+xml"
+    },
+    "icone-09.svg": {
+     "name": "icone-09.svg",
+     "blob": "83005bef83a6bd4bcfa9307c7a050b52",
+     "size": 7186,
+     "type": "image/svg+xml"
+    },
+    "icone-10.svg": {
+     "name": "icone-10.svg",
+     "blob": "2b0021432789a8249e658150c6904f87",
+     "size": 3814,
+     "type": "image/svg+xml"
+    },
+    "icone-11.svg": {
+     "name": "icone-11.svg",
+     "blob": "17eefd298ba0b50849860088613f482d",
+     "size": 5562,
+     "type": "image/svg+xml"
+    },
+    "icone-12.svg": {
+     "name": "icone-12.svg",
+     "blob": "9ae52e4b3bc7aa406ffb7db723a5f4a2",
+     "size": 5123,
+     "type": "image/svg+xml"
+    },
+    "icone-13.svg": {
+     "name": "icone-13.svg",
+     "blob": "a29ca9a66d240562671503cb944c15d1",
+     "size": 6419,
+     "type": "image/svg+xml"
+    },
+    "icone-14.svg": {
+     "name": "icone-14.svg",
+     "blob": "e49853e1413c9e201ddd206839f856ad",
+     "size": 3692,
+     "type": "image/svg+xml"
+    },
+    "icone-15.svg": {
+     "name": "icone-15.svg",
+     "blob": "a063a25ef3c853b1c40fded18e69950f",
+     "size": 3760,
+     "type": "image/svg+xml"
+    },
+    "icone-16.svg": {
+     "name": "icone-16.svg",
+     "blob": "ee05fc18185bbedf8a2feb35d6a8db7e",
+     "size": 4771,
+     "type": "image/svg+xml"
+    },
+    "icone-17.svg": {
+     "name": "icone-17.svg",
+     "blob": "3037da9296fcd33d2dacac2b876b0c6e",
+     "size": 5750,
+     "type": "image/svg+xml"
+    },
+    "icone-18.svg": {
+     "name": "icone-18.svg",
+     "blob": "1dcbffbc19406b0125a78a875195b933",
+     "size": 5544,
+     "type": "image/svg+xml"
+    },
+    "icone-19.svg": {
+     "name": "icone-19.svg",
+     "blob": "b3cc1b997f97871806e8a3fbc7e395e1",
+     "size": 4878,
+     "type": "image/svg+xml"
+    },
+    "icone-20.svg": {
+     "name": "icone-20.svg",
+     "blob": "8056a895d2584a5587c9ad628a9f6576",
+     "size": 7127,
+     "type": "image/svg+xml"
+    },
+    "icone-21.svg": {
+     "name": "icone-21.svg",
+     "blob": "0c496925ce723fc3026ec45c58412e77",
+     "size": 4740,
+     "type": "image/svg+xml"
+    },
+    "icone-22.svg": {
+     "name": "icone-22.svg",
+     "blob": "bb267dabf47911b65129518d38d901fd",
+     "size": 4507,
+     "type": "image/svg+xml"
+    },
+    "icone-23.svg": {
+     "name": "icone-23.svg",
+     "blob": "6e10e56c4cc495d323e5702db1d2e830",
+     "size": 3947,
+     "type": "image/svg+xml"
+    },
+    "icone-24.svg": {
+     "name": "icone-24.svg",
+     "blob": "3aa7ee403214ff6f63ac9d20a9644600",
+     "size": 6578,
+     "type": "image/svg+xml"
+    }
+   }
+  }
+ },
+ "blobs": {},
+ "docs": {
+  "readme": "project/README.md",
+  "sections": []
+ },
+ "lastChange": {
+  "by": "Carlos Lima",
+  "at": "2026-11-24T16:32:01Z",
+  "via": "Claude Code",
+  "note": "Primeira versão do design system do site Festeja 2027"
+ }
+}

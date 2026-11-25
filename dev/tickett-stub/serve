@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Arranca o simulador local do checkout Tickett em http://127.0.0.1:8081
+cd "$(dirname "$0")" || exit 1
+exec php -S 127.0.0.1:8081 -t "$(pwd)" "$(pwd)/router.php"

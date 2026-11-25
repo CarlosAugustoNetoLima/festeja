@@ -1,0 +1,614 @@
+/*
+ * Tema Festeja para o checkout da Tickett servido pelo proxy /checkout (app/Services/CheckoutProxy.php).
+ * Só cores, tipos de letra, raios e sombras. Não mexe em layout, ordem, posições, tamanhos nem textos.
+ * Tudo prefixado por .fj-checkout-tema (classe no <html>), por isso não afeta o resto do site.
+ * Valores = paleta "papel" de public/assets/css/tokens.css.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&family=Rubik:wght@700;800&display=swap');
+
+.fj-checkout-tema {
+	--tk-bg: #f5eed1;
+	--tk-surface: #fffdf6;
+	--tk-sunken: #ede2b6;
+	--tk-ink: #133a27;
+	--tk-muted: #46594c;
+	--tk-line: #dccf9e;
+	--tk-line-strong: #857443;
+	--tk-action: #b53a08;
+	--tk-action-hover: #8f2e06;
+	--tk-on-action: #ffffff;
+	--tk-danger: #a4161a;
+	--tk-success: #1e6b45;
+	--tk-focus: #133a27;
+	--tk-radius: 16px;
+	--tk-radius-btn: 999px;
+	--tk-shadow-btn: 4px 4px 0 0 #133a27;
+	--tk-font: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+	--tk-font-display: "Rubik", system-ui, sans-serif;
+	/* Escala de espaço de tokens.css (16/24/32) */
+	--tk-space-2: 8px;
+	--tk-space-3: 12px;
+	--tk-space-4: 16px;
+	--tk-space-6: 24px;
+	--tk-space-8: 32px;
+}
+
+/* Fundos: a Tickett pinta o fundo de azul-marinho (.map-card, .calema-section, html, body, blobs) */
+.fj-checkout-tema,
+.fj-checkout-tema body,
+.fj-checkout-tema #tickets-container,
+.fj-checkout-tema .calema-section,
+.fj-checkout-tema .map-card,
+.fj-checkout-tema .cart-content {
+	background-color: var(--tk-bg) !important;
+	color: var(--tk-ink);
+	font-family: var(--tk-font);
+}
+
+.fj-checkout-tema .blob {
+	background: transparent !important;
+}
+
+.fj-checkout-tema .off-date,
+.fj-checkout-tema .cart,
+.fj-checkout-tema .cart-finish,
+.fj-checkout-tema .content-seats,
+.fj-checkout-tema .ticket-info {
+	background-color: var(--tk-surface);
+	color: var(--tk-ink);
+}
+
+.fj-checkout-tema .cart-sidebar {
+	background-color: var(--tk-sunken);
+	border-left-color: var(--tk-line);
+	color: var(--tk-ink);
+}
+
+.fj-checkout-tema .cart-all,
+.fj-checkout-tema .cart-box {
+	color: var(--tk-ink);
+}
+
+/* Texto */
+.fj-checkout-tema #tickets-container,
+.fj-checkout-tema #tickets-container p,
+.fj-checkout-tema #tickets-container label,
+.fj-checkout-tema #tickets-container td,
+.fj-checkout-tema #tickets-container th,
+.fj-checkout-tema #tickets-container li,
+.fj-checkout-tema #tickets-container .table,
+.fj-checkout-tema #tickets-container .table td,
+.fj-checkout-tema #tickets-container .table th,
+.fj-checkout-tema #tickets-container .table-cart-resume,
+.fj-checkout-tema #tickets-container .cart-resume-content,
+.fj-checkout-tema #tickets-container .cart-resume-title {
+	color: var(--tk-ink);
+}
+
+.fj-checkout-tema h1,
+.fj-checkout-tema h2,
+.fj-checkout-tema h3,
+.fj-checkout-tema h4,
+.fj-checkout-tema h5,
+.fj-checkout-tema h6,
+.fj-checkout-tema .subtitle {
+	font-family: var(--tk-font-display);
+	color: var(--tk-ink);
+}
+
+.fj-checkout-tema small,
+.fj-checkout-tema .text-muted {
+	color: var(--tk-muted);
+}
+
+.fj-checkout-tema .text-danger {
+	color: var(--tk-danger);
+}
+
+.fj-checkout-tema .text-success {
+	color: var(--tk-success);
+}
+
+.fj-checkout-tema .alert-info {
+	background-color: var(--tk-surface);
+	border-color: var(--tk-line);
+	color: var(--tk-ink);
+}
+
+.fj-checkout-tema .alert-danger {
+	background-color: var(--tk-surface);
+	border-color: var(--tk-danger);
+	color: var(--tk-danger);
+}
+
+.fj-checkout-tema hr,
+.fj-checkout-tema .border-bottom,
+.fj-checkout-tema .cart-resume-title {
+	border-color: var(--tk-line) !important;
+}
+
+/* Cartões, tabelas e linhas de bilhete */
+.fj-checkout-tema .ticket-box {
+	background-color: var(--tk-surface);
+	border: 1px solid var(--tk-line);
+	border-radius: var(--tk-radius);
+	color: var(--tk-ink);
+}
+
+.fj-checkout-tema .table td,
+.fj-checkout-tema .table th,
+.fj-checkout-tema .table-cart-resume td,
+.fj-checkout-tema .table-cart-resume th {
+	background-color: transparent;
+	border-color: var(--tk-line);
+}
+
+/* Bilhete escolhido pelo site (mensagem select da ponte: realce, sem mexer no layout) */
+.fj-checkout-tema .fj-produto-selecionado {
+	outline: 3px solid var(--tk-action);
+	outline-offset: 2px;
+	border-radius: var(--tk-radius);
+}
+
+/* Botões primários. !important onde a Tickett põe cor inline (ex.: #button-products, verde WhatsApp) */
+.fj-checkout-tema .btn-primary,
+.fj-checkout-tema .btn-success,
+.fj-checkout-tema .btn-info,
+.fj-checkout-tema .btn-action-cart,
+.fj-checkout-tema .continue-btn,
+.fj-checkout-tema #button-products,
+.fj-checkout-tema #button-payment,
+.fj-checkout-tema #button-payment-VivaWallet,
+.fj-checkout-tema #button-delivery,
+.fj-checkout-tema #button-enter,
+.fj-checkout-tema #button-coupon,
+.fj-checkout-tema #button-email,
+.fj-checkout-tema #button-send-email,
+.fj-checkout-tema #button-send-whatsapp {
+	background-color: var(--tk-action) !important;
+	border-color: var(--tk-action) !important;
+	color: var(--tk-on-action) !important;
+	border-radius: var(--tk-radius-btn);
+	box-shadow: var(--tk-shadow-btn);
+	font-family: var(--tk-font-display);
+}
+
+.fj-checkout-tema .btn-primary:hover,
+.fj-checkout-tema .btn-success:hover,
+.fj-checkout-tema .btn-info:hover,
+.fj-checkout-tema .btn-action-cart:hover,
+.fj-checkout-tema .continue-btn:hover,
+.fj-checkout-tema #button-products:hover,
+.fj-checkout-tema #button-payment:hover,
+.fj-checkout-tema #button-delivery:hover {
+	background-color: var(--tk-action-hover) !important;
+	border-color: var(--tk-action-hover) !important;
+	color: var(--tk-on-action) !important;
+}
+
+.fj-checkout-tema .btn-primary:disabled,
+.fj-checkout-tema .btn-primary.disabled,
+.fj-checkout-tema .btn-info:disabled,
+.fj-checkout-tema .btn-info.disabled {
+	opacity: 0.55;
+}
+
+.fj-checkout-tema .btn-secondary {
+	background-color: var(--tk-surface);
+	border: 2px solid var(--tk-ink);
+	border-radius: var(--tk-radius-btn);
+	color: var(--tk-ink);
+	font-family: var(--tk-font-display);
+}
+
+.fj-checkout-tema .btn:focus,
+.fj-checkout-tema .form-control:focus,
+.fj-checkout-tema .custom-select:focus,
+.fj-checkout-tema .quantity-select:focus,
+.fj-checkout-tema .button-select-product:focus {
+	outline: 3px solid var(--tk-focus);
+	outline-offset: 2px;
+}
+
+/* Código promocional: a Tickett põe texto branco e borda branca inline sobre o creme (ilegível) */
+.fj-checkout-tema #promo-btn {
+	background-color: transparent !important;
+	border: 2px solid var(--tk-ink) !important;
+	border-radius: var(--tk-radius-btn);
+	color: var(--tk-ink) !important;
+	font-family: var(--tk-font-display);
+}
+
+.fj-checkout-tema #promo-btn svg {
+	fill: currentColor;
+}
+
+.fj-checkout-tema #promo-btn:hover {
+	background-color: var(--tk-sunken) !important;
+}
+
+/* Seta do carrinho (mobile): o svg tem stroke branco inline, invisível sobre o creme */
+.fj-checkout-tema #button-cart-sider {
+	background-color: transparent !important;
+}
+
+.fj-checkout-tema #button-cart-sider svg,
+.fj-checkout-tema #button-cart-sider svg path {
+	stroke: var(--tk-ink) !important;
+}
+
+/* Inputs, selects e botões de quantidade */
+.fj-checkout-tema .form-control,
+.fj-checkout-tema .custom-select,
+.fj-checkout-tema input,
+.fj-checkout-tema select {
+	background-color: var(--tk-surface);
+	border: 1px solid var(--tk-line-strong);
+	border-radius: 8px;
+	color: var(--tk-ink);
+}
+
+/* Campos com a classe novo-campo (login/site.volt): a Tickett põe fundo translúcido, borda 0 e texto branco, pensados para
+   fundo escuro. Ficam iguais aos outros inputs (o de nome não tinha borda, os de email e país tinham). */
+.fj-checkout-tema .novo-campo,
+.fj-checkout-tema .novo-campo:focus {
+	background-color: var(--tk-surface) !important;
+	border: 1px solid var(--tk-line-strong) !important;
+	color: var(--tk-ink) !important;
+}
+
+.fj-checkout-tema .quantity-select {
+	background-color: transparent;
+	border: none;
+	color: var(--tk-ink);
+}
+
+.fj-checkout-tema .button-select-product {
+	background-color: var(--tk-sunken) !important;
+	border: 1px solid var(--tk-line-strong) !important;
+	border-radius: var(--tk-radius-btn);
+	color: var(--tk-ink) !important;
+}
+
+.fj-checkout-tema .button-select-product:hover {
+	background-color: var(--tk-action) !important;
+	border-color: var(--tk-action) !important;
+	color: var(--tk-on-action) !important;
+}
+
+/* Botão × de remover linha do carrinho: cor branca inline na Tickett */
+.fj-checkout-tema .close {
+	color: var(--tk-ink) !important;
+	opacity: 1;
+}
+
+/* Erros e mensagens de sucesso */
+.fj-checkout-tema .off-date {
+	border-radius: var(--tk-radius);
+}
+
+/* Ícones e setas de SVG da Tickett */
+.fj-checkout-tema .bi,
+.fj-checkout-tema .icon {
+	color: var(--tk-ink);
+}
+
+/* Fundo azul do modo FNAC/mapa (não usado em eventos sem mapa, mas nunca deve aparecer) */
+.fj-checkout-tema .content-seats,
+.fj-checkout-tema .seat-viewer-container {
+	background-color: var(--tk-bg) !important;
+}
+
+/* Blobs e recortes da marca Tickett não aparecem */
+.fj-checkout-tema .blob1,
+.fj-checkout-tema .blob2 {
+	background: transparent !important;
+}
+
+/* Texto com cor clara inline ou !important da Tickett sobre o creme/sunken (contraste AA, medido por CDP).
+   Só cor: os tamanhos, posições e textos ficam como estão. */
+.fj-checkout-tema .subtitle a {
+	color: var(--tk-ink) !important;
+}
+
+.fj-checkout-tema a {
+	color: var(--tk-action-hover);
+}
+
+.fj-checkout-tema .text-muted {
+	color: var(--tk-muted) !important;
+}
+
+.fj-checkout-tema .cronometro td,
+.fj-checkout-tema #timeCron {
+	color: var(--tk-danger) !important;
+}
+
+/* Seletor do indicativo telefónico (select2): texto branco da Tickett sobre fundo claro */
+.fj-checkout-tema .select2-container .select2-selection__rendered,
+.fj-checkout-tema .select2-results__option {
+	color: var(--tk-ink) !important;
+}
+
+/* Telefone (login/site.volt): indicativo + número num grupo de input. A Tickett põe o seletor sem caixa (fundo quase
+   transparente, borda transparente) e o número fica com ~119 px, o que corta "Mobile Number". Aqui: o grupo ocupa a
+   largura toda a partir de 768 px (a coluna de metade deixava o placeholder de 21 caracteres cortado), seletor e campo
+   com a mesma altura, borda, fundo e raio dos outros inputs, e o campo ocupa o espaço que sobra. */
+@media (min-width: 768px) {
+	.fj-checkout-tema .form-group:has(.number_fone) {
+		flex: 0 0 100%;
+		max-width: 100%;
+	}
+}
+
+.fj-checkout-tema .input-group-prepend {
+	flex: 0 0 auto;
+}
+
+.fj-checkout-tema .input-group .select2-container--default .select2-selection--single {
+	background-color: var(--tk-surface) !important;
+	border: 1px solid var(--tk-line-strong) !important;
+	border-right: 0 !important;
+	border-radius: 8px 0 0 8px !important;
+	height: 38px !important;
+	box-sizing: border-box;
+}
+
+.fj-checkout-tema .input-group .select2-container--default .select2-selection--single .select2-selection__rendered {
+	line-height: 36px;
+}
+
+.fj-checkout-tema .number_fone {
+	flex: 1 1 auto;
+	min-width: 0;
+	width: 1%;
+	height: 38px;
+	border-radius: 0 8px 8px 0;
+}
+
+/* Abaixo de 380 px (ex.: 360) o indicativo e o número não cabem numa linha: o seletor fica por cima e o campo por baixo,
+   com a mesma largura. O placeholder "Confirmar telemóvel" (143 px) precisa de mais do que os 125 px úteis do campo ao lado. */
+@media (max-width: 380px) {
+	/* .flex-nowrap do Bootstrap tem !important: aqui também */
+	.fj-checkout-tema .input-group.flex-nowrap {
+		flex-wrap: wrap !important;
+	}
+
+	.fj-checkout-tema .input-group > .input-group-prepend {
+		flex: 0 0 100%;
+		max-width: 100%;
+	}
+
+	.fj-checkout-tema .input-group .select2-container--default .select2-selection--single {
+		border-right: 1px solid var(--tk-line-strong) !important;
+		border-radius: 8px !important;
+	}
+
+	.fj-checkout-tema .input-group .select2-container {
+		width: 100% !important;
+	}
+
+	.fj-checkout-tema .number_fone {
+		flex: 0 0 100%;
+		width: 100%;
+		margin-top: var(--tk-space-2);
+		border-radius: 8px;
+	}
+}
+
+/* Espaçamento: a Tickett põe margem negativa de 15 px nos .row (a linha de resumo ficava 15 px fora do iframe) e
+   colunas sem respiro (cartões encostados à borda). Margens dos .row a zero e padding simétrico nas colunas, para que
+   a margem esquerda e a direita do checkout sejam iguais e nada saia do iframe. */
+.fj-checkout-tema .row {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.fj-checkout-tema .cart-content > [class*="col-"] {
+	padding-left: var(--tk-space-6);
+	padding-right: var(--tk-space-6);
+	min-width: 0;
+	box-sizing: border-box;
+	max-width: 100%;
+}
+
+.fj-checkout-tema .cart-content,
+.fj-checkout-tema .cart-resume,
+.fj-checkout-tema .cart-resume-content,
+.fj-checkout-tema .cart-all,
+.fj-checkout-tema .cart-box,
+.fj-checkout-tema .table-cart-resume {
+	box-sizing: border-box;
+	max-width: 100%;
+	min-width: 0;
+	overflow-wrap: break-word;
+}
+
+.fj-checkout-tema #promo-btn {
+	box-sizing: border-box;
+	max-width: 100%;
+}
+
+/* Embebido no iframe, a Tickett pinta o checkout em ecrã inteiro: #tickets-container é fixo com altura de 100vh e
+   .cart-content tem altura de 100%. Assim a altura do conteúdo depende da altura do próprio iframe, e a ponte (resize)
+   não converge. Aqui o contentor fica no fluxo normal do documento: só posicionamento e altura, sem mudar ordem nem colunas. */
+.fj-checkout-tema #tickets-container {
+	position: static !important;
+	height: auto !important;
+	overflow: visible !important;
+}
+
+.fj-checkout-tema .row.cart-content {
+	height: auto !important;
+}
+
+/* Altura das colunas e da lista: sem alturas fixas nem overflow próprio (a lista de bilhetes é a da Tickett a 700 px
+   com overflow:auto, e as colunas a 100% da altura do ecrã): o último bilhete ficava inacessível e
+   a coluna do carrinho ganhava barra própria. Dentro do iframe os contentores de fluxo ficam com altura automática e sem
+   overflow próprio: quem rola é o documento do iframe. A gaveta do carrinho no mobile
+   (position fixed) mantém o scroll interno. */
+.fj-checkout-tema .div-table-product {
+	height: auto !important;
+	max-height: none !important;
+	overflow: visible !important;
+}
+
+.fj-checkout-tema .cart-content > [class*="col-"]:not(.cart-sidebar) {
+	height: auto !important;
+	max-height: none !important;
+	overflow: visible !important;
+}
+
+@media (min-width: 768px) {
+	.fj-checkout-tema .cart-sidebar {
+		height: auto !important;
+		max-height: none !important;
+		overflow: visible !important;
+	}
+}
+
+/* Margens laterais iguais: a coluna da lista e a do pedido têm 24 px de respiro cada uma. Tira-se o padding horizontal
+   que a Tickett põe em .off-date (15 px) e a margem de 40 px do resumo (.cart-all), que deixava a direita mais larga. */
+.fj-checkout-tema .off-date {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+}
+
+/* A caixa da coluna da lista tem altura fixa na Tickett e o conteúdo (lista, formulário) sai dela: a linha e a coluna
+   ficavam mais curtas do que o conteúdo. Altura pelo conteúdo, como o resto do checkout dentro do iframe. */
+.fj-checkout-tema .cart-content > [class*="col-"]:not(.cart-sidebar) .off-date {
+	height: auto !important;
+	max-height: none !important;
+	overflow: visible !important;
+}
+
+.fj-checkout-tema .cart-all {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+/* Coluna da lista: o respiro esquerdo fica no espaço das caixas dos bilhetes e dos formulários (que já têm margem
+   interna), por isso o padding esquerdo desta coluna é menor; a direita (resumo) mantém 24 px. */
+.fj-checkout-tema .cart-content > [class*="col-"]:not(.cart-sidebar) {
+	padding-left: var(--tk-space-3);
+}
+
+/* Scroll: o documento do iframe é o único contexto de scroll (o iframe ocupa a altura do corpo do modal, checkout.css).
+   A Tickett fixa #tickets-container a 100vh, a lista a 700 px com overflow próprio e põe o html com overflow oculto:
+   aqui tudo isso fica em fluxo e quem rola é o html. */
+html.fj-checkout-tema {
+	height: auto !important;
+	overflow-y: auto !important;
+	overflow-x: hidden !important;
+}
+
+html.fj-checkout-tema body {
+	height: auto !important;
+	min-height: 0 !important;
+	overflow: visible !important;
+}
+
+/* Desktop (iframe >= 901 px, como o breakpoint da Tickett): a coluna do pedido fica sticky no documento. O fundo
+   creme da coluna do pedido ocupa a altura total (fundo da linha), e a coluna da lista tem o fundo do checkout.
+   A linha tem pelo menos a altura do iframe: sem isto acaba onde acaba a coluna da lista (a coluna do pedido é sticky
+   e não estica a linha) e o resto do iframe fica com o fundo do corpo. */
+@media (min-width: 901px) {
+	/* A lista de bilhetes (.off-date, com margem em cima) sai 40 px da caixa da coluna: a linha tem esse espaço em baixo,
+	   para o fundo das duas colunas chegar ao fim do documento (medido em pt e en, 1280 e 1440). */
+	.fj-checkout-tema .cart-content {
+		background-color: var(--tk-sunken) !important;
+		min-height: 100vh;
+		padding-bottom: 40px;
+	}
+
+	.fj-checkout-tema .cart-content > [class*="col-"]:not(.cart-sidebar) {
+		background-color: var(--tk-bg) !important;
+	}
+
+	.fj-checkout-tema .cart-content > .cart-sidebar.cart-sidebar {
+		position: sticky !important;
+		top: var(--tk-space-6);
+		align-self: flex-start;
+	}
+}
+
+/* Um só contexto de scroll: o formulário de registo da Tickett tem altura de 90 vh e scroll próprio (inline), e o último
+   campo ficava dentro desse scroll. Altura pelo conteúdo em todas as larguras: rola só o documento do iframe. */
+html.fj-checkout-tema #tickets-form-register {
+	height: auto !important;
+}
+
+/* Mobile (iframe <= 900 px, breakpoint da Tickett): a gaveta do carrinho fica fixa em baixo, como no original
+   (chevron recolhe/expande). Recolhida ocupa 20% da altura visível, por isso o documento tem essa margem em baixo
+   para o último bilhete nunca ficar por baixo dela. Expandida, a gaveta tem scroll próprio dentro da altura visível. */
+@media (max-width: 900px) {
+	/* Fim do scroll: só o espaço da gaveta recolhida (20% da altura visível) + 24 px. Substitui o padding-bottom
+	   de 200 px que a Tickett põe em #tickets-form-products (só nesta vista, para não somar espaço vazio). */
+	html.fj-checkout-tema #tickets-form-products {
+		padding-bottom: 0 !important;
+	}
+
+	/* Medidas da gaveta (px, Chrome): 23 de margem em cima do título, título com o chevron 44, Continuar 60 (fixo em baixo).
+	   Recolhida (127 px = 23 + 44 + 60) mostra só a barra "O TEU PEDIDO" com o chevron e o Continuar; o resto da gaveta
+	   fica recortado (overflow hidden). Expandida: 85% da altura visível, com scroll interno e espaço para o Continuar. */
+	html.fj-checkout-tema {
+		--tk-gaveta: 127px;
+		--tk-gaveta-continuar: 68px;
+	}
+
+	/* Margens de fundo da Tickett nos formulários (250 px no de entrega e pagamento, 70 px na lista) somavam-se ao espaço
+	   da gaveta: o espaço do fim do documento é só o do body (gaveta recolhida + 24 px). */
+	html.fj-checkout-tema #tickets-form-delivery-payment,
+	html.fj-checkout-tema #tickets-form-payment,
+	html.fj-checkout-tema #tickets-form-register,
+	html.fj-checkout-tema .cart-content > [class*="col-"]:not(.cart-sidebar) .off-date {
+		margin-bottom: 0 !important;
+	}
+
+	/* Espaço no fim do documento = gaveta recolhida + 24 px, a mesma medida que a gaveta usa (não 20vh). */
+	html.fj-checkout-tema body {
+		padding-bottom: calc(var(--tk-gaveta) + 24px);
+	}
+
+	.fj-checkout-tema .cart-sidebar {
+		overflow-y: auto !important;
+		height: var(--tk-gaveta) !important;
+		/* O fim do scroll da gaveta fica acima do Continuar (fixo) */
+		padding-bottom: var(--tk-gaveta-continuar) !important;
+	}
+
+	.fj-checkout-tema .cart-sidebar.open {
+		height: 85% !important;
+	}
+
+	.fj-checkout-tema .cart-sidebar.openAuto {
+		height: 50% !important;
+	}
+
+	/* Cabeçalho "O TEU PEDIDO" com o chevron: fica no topo da gaveta ao rolar (também no estado openAuto) */
+	.fj-checkout-tema .cart-resume-title {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		background-color: var(--tk-sunken);
+	}
+
+	/* Recolhida: só a barra "O TEU PEDIDO" (com o chevron) e o Continuar ficam visíveis. O resto da gaveta (itens, total,
+	   mensagens) fica invisível e não espreita por baixo da barra. Expandida mostra tudo, com scroll interno. */
+	.fj-checkout-tema .cart-sidebar:not(.open):not(.openAuto) {
+		overflow: hidden !important;
+	}
+
+	.fj-checkout-tema .cart-sidebar:not(.open):not(.openAuto) .cart-all {
+		visibility: hidden;
+	}
+
+	.fj-checkout-tema .cart-sidebar:not(.open):not(.openAuto) .cart-resume-title,
+	.fj-checkout-tema .cart-sidebar:not(.open):not(.openAuto) #button-products {
+		visibility: visible;
+	}
+
+	.fj-checkout-tema .cart-sidebar .continue-btn {
+		z-index: 3;
+	}
+}

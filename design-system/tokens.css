@@ -1,0 +1,140 @@
+/* Festeja — generated from tokens.json */
+:root, [data-theme="papel"] {
+  --surface: #f5eed1;
+  --surface-raised: #fffdf6;
+  --surface-sunken: #ede2b6;
+  --ink: #133a27;
+  --ink-muted: #46594c;
+  --line: #dccf9e;
+  --line-strong: #857443;
+  --brand-orange: #e95110;
+  --brand-ochre: #e3900c;
+  --brand-green: #133a27;
+  --brand-clay: #c46313;
+  --action: #b53a08;
+  --action-hover: #8f2e06;
+  --on-action: #ffffff;
+  --link: #b53a08;
+  --focus: #133a27;
+  --highlight: #e3900c;
+  --on-highlight: #133a27;
+  --danger: #a4161a;
+  --success: #1e6b45;
+  --scrim: rgba(14, 44, 30, 0.72);
+  --shadow-sticker: 4px 4px 0 0 #133a27;
+  --shadow-sticker-press: 1px 1px 0 0 #133a27;
+  --shadow-float: 0 8px 24px 0 rgba(14, 44, 30, 0.28);
+}
+[data-theme="noite"] {
+  --surface: #133a27;
+  --surface-raised: #1b4a33;
+  --surface-sunken: #0e2c1e;
+  --ink: #f5eed1;
+  --ink-muted: #c3d1bf;
+  --line: #2e5c44;
+  --line-strong: #6f9a80;
+  --action: #e3900c;
+  --action-hover: #f4a93a;
+  --on-action: #133a27;
+  --link: #f4c36b;
+  --focus: #f4c36b;
+  --highlight: #f4c36b;
+  --danger: #ff9c8a;
+  --success: #8fd6a8;
+  --shadow-sticker: 4px 4px 0 0 #0e2c1e;
+  --shadow-sticker-press: 1px 1px 0 0 #0e2c1e;
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --radius-sm: 6px;
+  --radius-md: 16px;
+  --radius-lg: 32px;
+  --radius-pill: 999px;
+  --font-display: "Rubik", "Arial Black", system-ui, sans-serif;
+  --font-poster: "Rubik Dirt", "Rubik", "Arial Black", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+.poster {
+  font-family: var(--font-poster);
+  font-size: 112px;
+  line-height: 0.9;
+  font-weight: 400;
+}
+.display-1 {
+  font-family: var(--font-display);
+  font-size: 72px;
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+.display-2 {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 800;
+}
+.heading {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+.title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+}
+.price {
+  font-family: var(--font-display);
+  font-size: 44px;
+  line-height: 1;
+  font-weight: 800;
+}
+.lead {
+  font-family: var(--font-body);
+  font-size: 21px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.body {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+.body-strong {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 700;
+}
+.small {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.button {
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}

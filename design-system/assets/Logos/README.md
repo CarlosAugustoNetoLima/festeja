@@ -1,0 +1,1 @@
+Logótipo vertical (hero desktop, rodapé, partilhas; mínimo 160px de largura) e horizontal (header e mobile; mínimo 40px de altura). Cores fixas: laranja #e95110, ocre #e3900c, verde #133a27 e castanho #c46313 em "FESTIVAL". Só sobre surface Papel. Vetorizados a partir da apresentação: trocar pelos originais do designer antes da produção.

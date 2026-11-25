@@ -1,0 +1,8 @@
+Options -MultiViews -Indexes
+
+RewriteEngine On
+
+# Ficheiros e pastas existentes são servidos diretamente; o resto passa pelo router.
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]

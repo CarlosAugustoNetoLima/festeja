@@ -1,0 +1,44 @@
+{
+  "grupos": [
+    {
+      "titulo": "Tickets",
+      "perguntas": [
+        { "p": "Where do I buy tickets?", "r": "Tickets are sold by Tickett. Choose your ticket on the tickets page and pay at checkout." },
+        { "p": "Will I get my ticket by email?", "r": "Yes. After you buy, your ticket is sent to the email address you give. Check your spam folder too." },
+        { "p": "Can I change or refund my ticket?", "r": "The terms for changes and refunds are shown at Tickett's checkout. Please read them before you pay. We will publish more details by June." }
+      ]
+    },
+    {
+      "titulo": "Entry",
+      "perguntas": [
+        { "p": "What time do the doors open?", "r": "The doors open at 16:00 on both days. Check the final time for each day before you set off." },
+        { "p": "Do I need to bring a printed ticket?", "r": "We will publish this information by June. In the meantime, keep the email confirming your purchase." },
+        { "p": "Is there a minimum age to get in?", "r": "The minimum age is not confirmed yet. We will publish this information by June." }
+      ]
+    },
+    {
+      "titulo": "On site",
+      "perguntas": [
+        { "p": "Is there Kizomba na Rua?", "r": "Yes. Kizomba na Rua runs on both days of the festival. Check the day and time on the line-up." },
+        { "p": "What can I bring into the festival site?", "r": "We will publish this information by June, with the list of permitted and prohibited items." },
+        { "p": "How do I get to the festival site?", "r": "The festival takes place at Estádio do Olivais e Moscavide, in Moscavide, Lisbon. You will find the transport options on the Getting there page." }
+      ]
+    },
+    {
+      "titulo": "Cashless",
+      "perguntas": [
+        { "p": "How do I pay on site?", "r": "You pay on site with the cashless wristband. We will publish by June how to top up the balance." },
+        { "p": "Can I get a refund for my wristband balance?", "r": "Yes. The balance can be refunded online after the festival. The deadline will be announced on the festival's social media." },
+        { "p": "What if I lose my wristband?", "r": "We will publish this information by June." }
+      ]
+    },
+    {
+      "titulo": "Accessibility",
+      "perguntas": [
+        { "p": "Is the festival site accessible?", "r": "We are preparing the accessibility information. We will publish it by June." },
+        { "p": "Are there reserved spaces for people with reduced mobility?", "r": "We will publish this information by June. If you need support, write to us through the festival's social media." },
+        { "p": "How do I ask for support on the day of the festival?", "r": "Tell us about your needs before the festival, through our social media, so that we can prepare the support." }
+      ]
+    }
+  ]
+}

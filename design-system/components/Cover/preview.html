@@ -1,0 +1,37 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html lang="pt-PT">
+<head><meta charset="utf-8"><title>Festeja — capa</title>
+<style>
+  body { margin: 0; background: var(--surface); }
+  .cover { position: relative; width: 960px; height: 288px; overflow: hidden; background: var(--surface); }
+  .cover svg { position: absolute; inset: 0; }
+  .ink { fill: var(--ink); } .orange { fill: var(--brand-orange); } .ochre { fill: var(--brand-ochre); }
+  .clay { fill: var(--brand-clay); } .paper { fill: var(--surface); } .sunken { fill: var(--surface-sunken); }
+  .ray { rx: 8px; } .pill { rx: 24px; }
+  .name { position: absolute; left: 40px; bottom: 40px; max-width: 440px; }
+  .name h1 { margin: 0; font-family: var(--font-display); font-weight: 900; font-size: 100px; line-height: .92; color: var(--ink); letter-spacing: -0.01em; }
+  .name p { margin: 12px 0 0; font-family: var(--font-body); font-size: 14px; color: var(--ink-muted); }
+</style></head>
+<body>
+<div class="cover">
+  <svg viewBox="0 0 960 288" width="960" height="288" aria-hidden="true">
+    <!--
+      blocks: ink slab 192×288 (space-24×3), brand-orange 208×160 bleeding top-right, brand-ochre disc r64, brand-clay pill 96×48 (radius-pill), surface-sunken band
+      arrangement: one tall slab with satellites, orange and sunken bleeding off the top and right edges
+      pattern: literal motif, the sun of the mandala: 8 rays (pills 16×44, radius 8) alternating orange/ochre round an ochre disc, 8 surface dots between them; the logo is a sun of rays and dots, nothing else is this brand
+      scales: space-4 16, space-12 48, space-24 96 multiples; radius-pill for rays and pill, discs as circles
+    -->
+    <rect class="sunken" x="480" y="224" width="480" height="64"/>
+    <rect class="ink" x="560" y="0" width="192" height="288"/>
+    <rect class="orange" x="752" y="0" width="208" height="160"/>
+    <circle class="ochre" cx="864" cy="224" r="64"/>
+    <rect class="clay pill" x="480" y="96" width="64" height="48"/>
+    <circle class="ochre" cx="656" cy="144" r="40"/>
+    <rect class="orange ray" x="648" y="32" width="16" height="44" transform="rotate(0 656 144)"/><rect class="ochre ray" x="648" y="32" width="16" height="44" transform="rotate(45 656 144)"/><rect class="orange ray" x="648" y="32" width="16" height="44" transform="rotate(90 656 144)"/><rect class="ochre ray" x="648" y="32" width="16" height="44" transform="rotate(135 656 144)"/><rect class="orange ray" x="648" y="32" width="16" height="44" transform="rotate(180 656 144)"/><rect class="ochre ray" x="648" y="32" width="16" height="44" transform="rotate(225 656 144)"/><rect class="orange ray" x="648" y="32" width="16" height="44" transform="rotate(270 656 144)"/><rect class="ochre ray" x="648" y="32" width="16" height="44" transform="rotate(315 656 144)"/>
+    <circle class="paper" cx="694.3" cy="51.6" r="8"/><circle class="paper" cx="748.4" cy="105.7" r="8"/><circle class="paper" cx="748.4" cy="182.3" r="8"/><circle class="paper" cx="694.3" cy="236.4" r="8"/><circle class="paper" cx="617.7" cy="236.4" r="8"/><circle class="paper" cx="563.6" cy="182.3" r="8"/><circle class="paper" cx="563.6" cy="105.7" r="8"/><circle class="paper" cx="617.7" cy="51.6" r="8"/>
+  </svg>
+  <div class="name"><h1>Festeja</h1><p>O festival que liga continentes. RTP África, Lisboa.</p></div>
+</div>
+</body>
+</html>

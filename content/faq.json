@@ -1,0 +1,49 @@
+{
+  "grupos": [
+    {
+      "id": "bilhetes",
+      "titulo": "Bilhetes",
+      "perguntas": [
+        { "p": "Onde compro bilhetes?", "r": "Os bilhetes são vendidos pela Tickett. Escolhe o bilhete na página de bilhetes e paga no checkout.", "home": true },
+        { "p": "Recebo o bilhete por email?", "r": "Sim. Depois da compra, o bilhete é enviado para o email que indicares. Confirma também a pasta de spam.", "home": true },
+        { "p": "Posso mudar ou reembolsar o bilhete?", "r": "As condições de alteração e reembolso estão no checkout da Tickett. Lê-as antes de pagar. Publicamos mais detalhes até junho.", "rever": true }
+      ]
+    },
+    {
+      "id": "acesso",
+      "titulo": "Acesso",
+      "perguntas": [
+        { "p": "A que horas abrem as portas?", "r": "As portas abrem às 16h00 nos dois dias. Confirma o horário final de cada dia antes de vires.", "home": true, "rever": true },
+        { "p": "Preciso de levar o bilhete impresso?", "r": "Publicamos esta informação até junho. Entretanto, guarda o email de confirmação da compra.", "rever": true },
+        { "p": "Há idade mínima para entrar?", "r": "A idade mínima ainda não está confirmada. Publicamos esta informação até junho.", "rever": true }
+      ]
+    },
+    {
+      "id": "recinto",
+      "titulo": "No recinto",
+      "perguntas": [
+        { "p": "Há Kizomba na Rua?", "r": "Sim. O Kizomba na Rua abre os dois dias do festival. Vê o dia e a hora no cartaz.", "home": true },
+        { "p": "O que posso levar para o recinto?", "r": "Publicamos esta informação até junho, com a lista de itens permitidos e proibidos.", "rever": true },
+        { "p": "Como chego ao recinto?", "r": "O festival acontece no Estádio do Olivais e Moscavide, em Moscavide, Lisboa. Na página Como chegar encontras as opções de transporte.", "rever": true }
+      ]
+    },
+    {
+      "id": "cashless",
+      "titulo": "Cashless",
+      "perguntas": [
+        { "p": "Como pago no recinto?", "r": "Paga-se no recinto com a pulseira cashless. Publicamos até junho como se carrega o saldo.", "rever": true },
+        { "p": "Posso reembolsar o saldo da pulseira?", "r": "Sim. O saldo pode ser reembolsado online depois do festival. O prazo é anunciado nas redes sociais do festival.", "home": true },
+        { "p": "E se perder a pulseira?", "r": "Publicamos esta informação até junho.", "rever": true }
+      ]
+    },
+    {
+      "id": "acessibilidade",
+      "titulo": "Acessibilidade",
+      "perguntas": [
+        { "p": "O recinto é acessível?", "r": "Estamos a preparar a informação de acessibilidade. Publicamos esta informação até junho.", "rever": true },
+        { "p": "Há lugares reservados para pessoas com mobilidade reduzida?", "r": "Publicamos esta informação até junho. Se precisares de apoio, escreve-nos pelas redes do festival.", "rever": true },
+        { "p": "Como peço apoio no dia do festival?", "r": "Indica-nos as tuas necessidades antes do festival, pelas redes sociais, para prepararmos o apoio.", "rever": true }
+      ]
+    }
+  ]
+}

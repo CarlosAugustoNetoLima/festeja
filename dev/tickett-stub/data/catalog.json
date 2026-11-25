@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "event": {
+    "id": 2001,
+    "name": "Festival Festeja 2027",
+    "currency": "EUR",
+    "checkout_url": "{base}/2001",
+    "sale": { "status": "open", "opens_at": null }
+  },
+  "products": [
+    {
+      "id": 9001,
+      "name": "Early Entry",
+      "description": "Entrada antecipada, a somar a um bilhete de dia ou de 2 dias.",
+      "days": [],
+      "price": 14.25,
+      "fee": 0.75,
+      "total": 15.00,
+      "batch": null,
+      "status": "available",
+      "next_batch": null,
+      "highlight": null,
+      "sort": 5,
+      "checkout_url": "{base}/2001?product=9001"
+    },
+    {
+      "id": 9002,
+      "name": "Plateia em pé — 23 julho",
+      "description": "Acesso à plateia em pé no dia 23 de julho.",
+      "days": ["2027-07-23"],
+      "price": 28.50,
+      "fee": 1.50,
+      "total": 30.00,
+      "batch": { "number": 1, "name": "Lote 1" },
+      "status": "available",
+      "next_batch": { "number": 2, "name": "Lote 2", "opens_at": "2027-06-12T14:00:00+01:00", "total": 35.00 },
+      "highlight": null,
+      "sort": 10,
+      "checkout_url": "{base}/2001?product=9002"
+    },
+    {
+      "id": 9003,
+      "name": "Plateia em pé — 24 julho",
+      "description": "Acesso à plateia em pé no dia 24 de julho.",
+      "days": ["2027-07-24"],
+      "price": 28.50,
+      "fee": 1.50,
+      "total": 30.00,
+      "batch": { "number": 1, "name": "Lote 1" },
+      "status": "low",
+      "next_batch": { "number": 2, "name": "Lote 2", "opens_at": "2027-06-12T14:00:00+01:00", "total": 35.00 },
+      "highlight": null,
+      "sort": 11,
+      "checkout_url": "{base}/2001?product=9003"
+    },
+    {
+      "id": 9004,
+      "name": "Passe 2 dias — Plateia em pé",
+      "description": "Acesso aos dois dias, plateia em pé.",
+      "days": [],
+      "price": 52.25,
+      "fee": 2.75,
+      "total": 55.00,
+      "batch": { "number": 1, "name": "Lote 1" },
+      "status": "available",
+      "next_batch": null,
+      "highlight": "Mais vendido",
+      "sort": 20,
+      "checkout_url": "{base}/2001?product=9004"
+    },
+    {
+      "id": 9005,
+      "name": "Golden Circle — 2 dias",
+      "description": "Zona junto ao palco, nos dois dias.",
+      "days": [],
+      "price": 42.75,
+      "fee": 2.25,
+      "total": 45.00,
+      "batch": { "number": 1, "name": "Lote 1" },
+      "status": "sold_out",
+      "next_batch": { "number": 2, "name": "Lote 2", "opens_at": "2027-06-01T14:00:00+01:00", "total": 50.00 },
+      "highlight": null,
+      "sort": 30,
+      "checkout_url": "{base}/2001?product=9005"
+    },
+    {
+      "id": 9006,
+      "name": "Golden Circle — 2 dias",
+      "description": "Zona junto ao palco, nos dois dias.",
+      "days": [],
+      "price": 47.50,
+      "fee": 2.50,
+      "total": 50.00,
+      "batch": { "number": 2, "name": "Lote 2" },
+      "status": "upcoming",
+      "next_batch": null,
+      "highlight": null,
+      "sort": 31,
+      "checkout_url": "{base}/2001?product=9006"
+    }
+  ]
+}

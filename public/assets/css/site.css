@@ -1,0 +1,1468 @@
+/* Festeja — shell do site (cabeçalho, menu, rodapé) e componentes de página. Mobile first: 768px e 1024px.
+   Valores vêm de tokens.css; composição de componentes em components.css. Overrides de fj- estão marcados. */
+
+:root {
+  --header-h: 64px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 72px;
+  }
+}
+
+/* Elementos com [hidden] que têm display próprio */
+.site-header__cart[hidden],
+.fj-buybar[hidden],
+.mobile-menu[hidden],
+.lineup-float img[hidden],
+.lineup-float__fallback[hidden],
+.lineup-float__chip[hidden] {
+  display: none;
+}
+
+/* Colunas de grelha fixas a 1fr no mobile: uma coluna "auto" cresce até ao conteúdo mais largo e transborda */
+.site-footer__grid,
+.grid-12,
+.section-head,
+.lineup-day,
+.fj-artist,
+.ticket-empty,
+.fj-buybar__info {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ---------- Utilitários ---------- */
+
+.section {
+  padding-block: var(--space-16);
+}
+
+@media (min-width: 1024px) {
+  .section {
+    padding-block: var(--space-24);
+  }
+}
+
+.section[data-theme] {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.grid-12 {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .grid-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .grid-12 > .lineup-day {
+    grid-column: span 6;
+  }
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Links no texto corrido: sublinhados, espessura sobe no hover */
+main p a:not([class]),
+main li a:not([class]),
+main dd a:not([class]) {
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+/* Links de nomes (cartaz, artistas, bilhetes) não são texto corrido: sem sublinhado nem cor de link */
+main .lineup-name a,
+main .fj-artist__name a,
+main .fj-ticket a:not([class]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+main p a:not([class]):hover,
+main li a:not([class]):hover,
+main dd a:not([class]):hover {
+  text-decoration-thickness: 2px;
+}
+
+.fj-eyebrow {
+  color: var(--ink-muted);
+}
+
+[data-theme="noite"] .fj-eyebrow {
+  color: var(--highlight);
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--surface);
+  border-bottom: 1px solid transparent;
+  transition: border-color 200ms ease;
+}
+
+.site-header.is-scrolled {
+  border-bottom-color: var(--line);
+}
+
+.site-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: var(--header-h);
+}
+
+.site-header__logo {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-height: 44px;
+  border-radius: var(--radius-sm);
+}
+
+.site-header__logo img {
+  height: 36px;
+  width: auto;
+}
+
+.site-header__nav {
+  display: none;
+}
+
+.site-header__list {
+  position: relative;
+  display: flex;
+  gap: var(--space-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header__indicador {
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  width: 0;
+  height: 4px;
+  background: var(--brand-orange);
+  pointer-events: none;
+}
+
+/* Com o indicador (movimento.js, classe is-indicador) os links não têm sublinhado próprio */
+.site-header__list.is-indicador a,
+.site-header__list.is-indicador a:hover,
+.site-header__list.is-indicador a[aria-current="page"] {
+  background-image: none;
+}
+
+/* Sublinhado que se desenha no hover (background-size 0 -> 100%) */
+.site-header__list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: none;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 2px;
+  transition: background-size 200ms ease;
+}
+
+.site-header__list a:hover {
+  background-size: 100% 2px;
+}
+
+.site-header__list a[aria-current="page"] {
+  background-image: linear-gradient(var(--brand-orange), var(--brand-orange));
+  background-size: 100% 4px;
+}
+
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+}
+
+.site-header__cart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--ink);
+  text-decoration: none;
+  border-radius: var(--radius-pill);
+}
+
+.site-header__cart-count {
+  min-width: 22px;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--highlight);
+  color: var(--on-highlight);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+}
+
+.site-header__buy,
+.site-header__buy-compact {
+  display: inline-flex;
+}
+
+.site-header__buy {
+  display: none;
+}
+
+.site-header__buy-compact {
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-size: 16px;
+}
+
+/* Seletor de idioma (PT | EN): no cabeçalho só no desktop; no menu móvel, por cima do rodapé do menu.
+   Tipografia de rótulo (como o eyebrow); o idioma atual sublinhado a laranja, como o item atual da navegação. */
+.site-header__idioma {
+  display: none;
+}
+
+.site-header__idioma ul,
+.mobile-menu__idioma ul {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-header__idioma a,
+.mobile-menu__idioma a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  color: var(--ink-muted);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+}
+
+.site-header__idioma a:hover,
+.mobile-menu__idioma a:hover {
+  color: var(--ink);
+}
+
+.site-header__idioma a[aria-current="true"],
+.mobile-menu__idioma a[aria-current="true"] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--brand-orange);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
+}
+
+.mobile-menu__idioma {
+  display: flex;
+}
+
+.site-header__menu-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.site-header__menu-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.site-header__menu-btn .icon-x {
+  display: none;
+}
+
+.site-header__menu-btn[aria-expanded="true"] .icon-x {
+  display: block;
+}
+
+.site-header__menu-btn[aria-expanded="true"] .icon-menu {
+  display: none;
+}
+
+/* Menu móvel: painel de ecrã inteiro abaixo do cabeçalho */
+.mobile-menu {
+  position: fixed;
+  top: var(--header-h);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 49;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-8) var(--space-4) var(--space-12);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--surface);
+}
+
+.mobile-menu__list {
+  display: grid;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-menu__list a {
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+  border-bottom: 2px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.1;
+  text-decoration: none;
+}
+
+.mobile-menu__list a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: var(--brand-orange);
+  text-decoration-thickness: 4px;
+  text-underline-offset: 6px;
+}
+
+.mobile-menu__foot {
+  display: grid;
+  gap: var(--space-6);
+  margin-top: auto;
+}
+
+.mobile-menu__social {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-menu__social a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .site-header__logo img {
+    height: 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-header__logo img {
+    height: 44px;
+  }
+
+  .site-header__idioma {
+    display: inline-flex;
+  }
+
+  .site-header__nav {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .site-header__inner {
+    gap: var(--space-8);
+  }
+
+  .site-header__buy {
+    display: inline-flex;
+  }
+
+  .site-header__buy-compact,
+  .site-header__menu-btn,
+  .mobile-menu {
+    display: none;
+  }
+}
+
+/* Sem JavaScript o menu não abre: a lista de links fica visível no próprio cabeçalho */
+.no-js .site-header__menu-btn {
+  display: none;
+}
+
+.no-js .mobile-menu {
+  display: flex !important;
+  position: static;
+  padding: var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .no-js .mobile-menu {
+    display: none !important;
+  }
+}
+
+/* ---------- Rodapé (tema Noite) ---------- */
+
+.site-footer {
+  padding-block: var(--space-16) calc(var(--space-16) + 88px); /* 88px: espaço da StickyBuyBar no mobile */
+}
+
+@media (min-width: 1024px) {
+  .site-footer {
+    padding-block: var(--space-24) var(--space-12);
+  }
+}
+
+.site-footer__grid {
+  display: grid;
+  gap: var(--space-12);
+}
+
+@media (min-width: 1024px) {
+  .site-footer__grid {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+}
+
+.site-footer__simbolo {
+  margin-bottom: var(--space-4);
+}
+
+.site-footer__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 40px;
+  line-height: 1;
+}
+
+.site-footer__mote {
+  margin: var(--space-3) 0 0;
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+.site-footer__meta {
+  margin: var(--space-3) 0 0;
+  color: var(--ink-muted);
+}
+
+.site-footer__label {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.site-footer__list {
+  display: grid;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.site-footer a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.site-footer__tickets {
+  margin: var(--space-4) 0 0;
+  font-size: 15px;
+  color: var(--ink-muted);
+}
+
+.site-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-6);
+  margin-top: var(--space-12);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line);
+  font-size: 15px;
+  color: var(--ink-muted);
+}
+
+.site-footer__bottom p {
+  margin: 0;
+}
+
+/* ---------- Cabeçalho de secção ---------- */
+
+.section-head {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+
+.section-head--center {
+  justify-items: center;
+  text-align: center;
+}
+
+.section-head__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.section-head--center .section-head__eyebrow {
+  justify-content: center;
+}
+
+.section-head__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.section-head__lead {
+  max-width: 60ch;
+  margin: 0;
+  font-size: 21px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
+/* ---------- Faixa em movimento (Marquee) ---------- */
+
+.fj-marquee {
+  padding: var(--space-3) var(--space-4);
+}
+
+@media (max-width: 767px) {
+  .fj-marquee {
+    display: none;
+  }
+}
+
+/* Override de components.css: os nomes são itens de lista, separados por símbolos (sem ponto ●) */
+.fj-marquee__track {
+  gap: 0;
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.fj-marquee__group {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0 var(--space-8) 0 0;
+  list-style: none;
+}
+
+.fj-marquee__item,
+.fj-marquee__sep {
+  display: inline-flex;
+  flex: none;
+}
+
+.fj-marquee__item {
+  white-space: nowrap;
+}
+
+.fj-marquee.is-paused .fj-marquee__track,
+.fj-marquee:hover .fj-marquee__track,
+.fj-marquee:focus-within .fj-marquee__track {
+  animation-play-state: paused;
+}
+
+.fj-marquee__pause {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--brand-green);
+  background: var(--surface);
+  color: var(--brand-green);
+  font: 700 15px / 1 var(--font-body);
+  cursor: pointer;
+}
+
+.fj-marquee__icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.fj-marquee__icon--play,
+.fj-marquee__label--play {
+  display: none;
+}
+
+.fj-marquee.is-paused .fj-marquee__icon--play,
+.fj-marquee.is-paused .fj-marquee__label--play {
+  display: block;
+}
+
+.fj-marquee.is-paused .fj-marquee__icon--pause,
+.fj-marquee.is-paused .fj-marquee__label--pause {
+  display: none;
+}
+
+.fj-marquee.is-paused .fj-marquee__label--play {
+  display: inline;
+}
+
+.no-js .fj-marquee__pause {
+  display: none;
+}
+
+/* ---------- Contagem ---------- */
+
+/* Override de components.css: texto simples, não lista */
+.fj-countdown {
+  display: block;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+/* ---------- Factos rápidos ---------- */
+
+/* Separadores: traço de pincel em brand-green (cor do background; a forma é a máscara).
+   Mobile: linhas horizontais curtas entre itens. Tablet e desktop: divisórias verticais entre colunas. */
+.facts {
+  --facts-sep-v: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 100' preserveAspectRatio='none'%3E%3Cpath d='M5.85 0C5.43 2.33 3.54 7.67 3.3 14C3.06 20.33 4.35 30 4.4 38C4.45 46 3.62 54 3.6 62C3.58 70 3.98 79.67 4.3 86C4.62 92.33 5.3 97.67 5.5 100C5.9 100.2 6.5 100.2 6.1 100C6.5 97.67 8.42 92.33 8.5 86C8.58 79.67 6.52 70 6.6 62C6.68 54 8.98 46 9 38C9.02 30 7.11 20.33 6.7 14C6.29 7.67 6.58 2.33 6.55 0Z'/%3E%3C/svg%3E");
+  --facts-sep-h: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12' preserveAspectRatio='none'%3E%3Cpath d='M0 5.85C2.33 5.43 7.67 3.54 14 3.3C20.33 3.06 30 4.35 38 4.4C46 4.45 54 3.62 62 3.6C70 3.58 79.67 3.98 86 4.3C92.33 4.62 97.67 5.3 100 5.5C100.4 5.7 100.4 6.3 100 6.1C97.67 6.5 92.33 8.42 86 8.5C79.67 8.58 70 6.52 62 6.6C54 6.68 46 8.98 38 9C30 9.02 20.33 7.11 14 6.7C7.67 6.29 2.33 6.58 0 6.55Z'/%3E%3C/svg%3E");
+  padding-block: var(--space-8);
+  background: var(--surface-sunken);
+  color: var(--ink);
+}
+
+.facts__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-12);
+  margin: 0;
+}
+
+.facts__item {
+  position: relative;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+  padding-inline: var(--space-3);
+  text-align: center;
+}
+
+.facts__item + .facts__item::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--space-12) / -2);
+  left: 50%;
+  width: 40%;
+  height: 8px;
+  transform: translate(-50%, -50%) scaleX(var(--facts-sep, 1));
+  background: var(--brand-green);
+  -webkit-mask: var(--facts-sep-h) center / 100% 100% no-repeat;
+  mask: var(--facts-sep-h) center / 100% 100% no-repeat;
+}
+
+.facts__item dt {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.facts__item dd {
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.facts__note {
+  display: block;
+  max-width: 100%;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+  text-wrap: balance;
+}
+
+/* Tablet e desktop: padding igual em cima e em baixo; divisórias verticais entre colunas da mesma linha */
+@media (min-width: 768px) {
+  .facts {
+    padding-block: var(--space-12);
+  }
+
+  .facts__item + .facts__item::before {
+    top: 50%;
+    left: 0;
+    width: 12px;
+    height: 76%;
+    transform: translate(-50%, -50%) scaleY(var(--facts-sep, 1));
+    -webkit-mask: var(--facts-sep-v) center / 100% 100% no-repeat;
+    mask: var(--facts-sep-v) center / 100% 100% no-repeat;
+  }
+
+  .facts__item:nth-child(even)::before {
+    transform: translate(-50%, -50%) scaleX(-1) scaleY(var(--facts-sep, 1));
+  }
+}
+
+/* Tablet: 3 + 2 itens, a segunda linha centrada (colunas 2-3 e 4-5 de 6) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .facts__list {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-8) 0;
+  }
+
+  .facts__item {
+    grid-column: span 2;
+  }
+
+  .facts__item:nth-child(4) {
+    grid-column: 2 / span 2;
+  }
+
+  .facts__item:nth-child(5) {
+    grid-column: 4 / span 2;
+  }
+
+  /* O 1.º item da 2.ª linha não tem divisória à esquerda */
+  .facts__item:nth-child(4)::before {
+    display: none;
+  }
+
+  /* Linha horizontal entre as duas linhas, a meio da separação de linhas */
+  .facts__item:nth-child(-n + 3)::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + var(--space-8) / 2 - 4px);
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: var(--brand-green);
+    -webkit-mask: var(--facts-sep-h) center / 100% 100% no-repeat;
+    mask: var(--facts-sep-h) center / 100% 100% no-repeat;
+  }
+}
+
+/* Desktop: 5 colunas iguais a ocupar o .wrap, sem espaço entre elas (as divisórias ficam na fronteira) */
+@media (min-width: 1024px) {
+  .facts__list {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+  }
+}
+
+/* Entre 1024 e 1279 as colunas são estreitas: valor um pouco menor e menos margem lateral, para não quebrar em 3 linhas */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .facts__item {
+    padding-inline: var(--space-2);
+  }
+
+  .facts__item dd {
+    font-size: 20px;
+  }
+}
+
+/* ---------- Bilhetes ---------- */
+
+.ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-8);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Override de components.css: sombra sticker, hover e press */
+.fj-ticket {
+  min-width: 0;
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sticker);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.fj-ticket:hover,
+.fj-ticket:focus-within {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 0 var(--line-strong);
+}
+
+.fj-ticket:has(.fj-btn--primary:active) {
+  transform: translate(3px, 3px);
+  box-shadow: var(--shadow-sticker-press);
+}
+
+.fj-ticket--soldout,
+.fj-ticket--soldout:hover,
+.fj-ticket--soldout:focus-within {
+  border-color: var(--line);
+  box-shadow: none;
+  transform: none;
+}
+
+.ticket-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-height: 28px;
+}
+
+.fj-badge svg {
+  flex: none;
+  width: 16px;
+  height: 16px;
+}
+
+.fj-badge--lote {
+  background: transparent;
+  color: var(--ink);
+  border: 2px solid var(--line-strong);
+}
+
+.fj-ticket__desc {
+  margin: 0;
+  font-size: 16px;
+  color: var(--ink-muted);
+}
+
+.fj-ticket__next {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ink-muted);
+}
+
+.ticket-empty {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  border: 2px solid var(--line);
+}
+
+.ticket-empty__text {
+  margin: 0;
+}
+
+/* ---------- Cartaz (LineupDay) ---------- */
+
+.lineup-day {
+  display: grid;
+  gap: var(--space-6);
+  justify-items: center;
+  min-width: 0;
+  text-align: center;
+}
+
+.lineup-day__head {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.lineup-day__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.05;
+}
+
+.lineup-day__portas,
+.lineup-day__note {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ink-muted);
+}
+
+.lineup-day__niveis {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.lineup-day__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: var(--space-2) 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+/* Nível 1: um nome por linha, sem pontos */
+.lineup-day__list--1 {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+}
+
+.lineup-name {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+/* Separador: ponto ocre entre nomes do mesmo nível (níveis 2 e 3, nunca depois do último) */
+.lineup-name--2:not(:last-child)::after,
+.lineup-name--3:not(:last-child)::after {
+  content: "";
+  align-self: center;
+  opacity: var(--ponto, 1);
+  width: 0.28em;
+  height: 0.28em;
+  margin: 0 var(--space-4);
+  border-radius: 50%;
+  background: var(--brand-ochre);
+}
+
+/* Alvo de toque com 24 px ou mais (WCAG 2.2 AA, 2.5.8): o link cresce 4 px para cima e para baixo, a margem negativa
+   compensa, e o aspeto e o espaçamento entre linhas ficam iguais. Os alvos vizinhos não se sobrepõem (o espaço entre linhas é 8 px). */
+.lineup-name a {
+  color: inherit;
+  text-decoration: none;
+  padding-block: 4px;
+  margin-block: -4px;
+}
+
+/* Selo "Novo" depois do nome (artista confirmado nos últimos 14 dias). Texto real, fora do link */
+.lineup-name__novo {
+  align-self: center;
+  margin-left: var(--space-2);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--highlight);
+  color: var(--on-highlight);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.6;
+  text-transform: none;
+}
+
+.lineup-name--1 {
+  font-size: clamp(32px, 4.2vw, 60px);
+}
+
+.lineup-name--1 a {
+  color: var(--ink);
+}
+
+.lineup-name--1:nth-child(even) a {
+  color: var(--brand-orange);
+}
+
+.lineup-name--2 {
+  font-size: clamp(24px, 2.8vw, 38px);
+}
+
+.lineup-name--3 {
+  font-size: clamp(18px, 1.8vw, 24px);
+  color: var(--ink-muted);
+}
+
+.lineup-name--1 a:hover,
+.lineup-name--2 a:hover {
+  color: var(--brand-orange);
+}
+
+.lineup-name--3 a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+/* Nomes do cartaz: sem sublinhado nem cor de link (main li a:not([class]) põe os links de texto a sublinhado) */
+main .lineup-name a:not([class]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+main .lineup-name--1 a:not([class]) {
+  color: var(--ink);
+}
+
+main .lineup-name--1:nth-child(even) a:not([class]) {
+  color: var(--brand-orange);
+}
+
+main .lineup-name--1 a:not([class]):hover,
+main .lineup-name--2 a:not([class]):hover {
+  color: var(--brand-orange);
+}
+
+main .lineup-name--3 a:not([class]):hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.15em;
+}
+
+/* ---------- Artistas (ArtistCard) ---------- */
+
+/* Nome do artista: sem sublinhado nem cor de link (main li a:not([class]) ganharia a main .fj-artist__name a) */
+main .fj-artist__name a:not([class]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Override de components.css: 2 colunas no mobile, 4 no desktop */
+.fj-artists {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 1024px) {
+  .fj-artists {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-8);
+  }
+}
+
+.fj-artist {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: var(--space-3);
+  min-width: 0;
+  transition: transform 200ms ease;
+}
+
+.fj-artist:hover {
+  transform: translateY(-2px);
+}
+
+.fj-artist__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  max-width: none;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--brand-orange);
+}
+
+/* Override de components.css: a imagem ocupa o retrato inteiro */
+.fj-artist__media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+.fj-artist:hover .fj-artist__media img {
+  transform: scale(1.03);
+}
+
+/* Sem fotografia: fundo liso (papel) com um símbolo da marca centrado, na forma original */
+.artist-card__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--surface-raised);
+}
+
+.artist-card__fallback .symbol {
+  width: 60%;
+  height: 60%;
+}
+
+.fj-artist__meta {
+  margin: 0;
+  font-size: 15px;
+  color: var(--ink-muted);
+}
+
+/* ---------- Perguntas frequentes (Faq) ---------- */
+
+/* Sem recuo lateral: as perguntas alinham com os títulos (components.css põe 24px de padding) */
+.fj-faq {
+  padding: 0;
+}
+
+/* Override de components.css: o chevron é o ícone do summary, o ::after "+" sai */
+.fj-faq summary::after {
+  content: none;
+}
+
+.fj-faq__question {
+  flex: 1;
+  min-width: 0;
+}
+
+.fj-faq__icon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-ochre);
+  color: var(--brand-green);
+  transition: transform 200ms ease;
+}
+
+.fj-faq details[open] .fj-faq__icon {
+  transform: rotate(180deg);
+}
+
+.fj-faq__answer p {
+  margin: 0;
+}
+
+.fj-faq__answer a {
+  color: var(--link);
+}
+
+/* ---------- Barra de compra (StickyBuyBar, mobile) ---------- */
+
+/* Override de components.css: fixa em baixo, fundo claro, só mobile */
+.fj-buybar {
+  position: fixed;
+  right: var(--space-4);
+  bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
+  left: var(--space-4);
+  z-index: 40;
+  margin: 0;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-6);
+  background: var(--surface-raised);
+  color: var(--ink);
+  border: 2px solid var(--line-strong);
+  box-shadow: var(--shadow-float);
+}
+
+.fj-buybar.is-visible {
+  animation: fj-slide-up 240ms ease both;
+}
+
+.fj-buybar__info {
+  flex: none;
+}
+
+.fj-buybar__info strong {
+  white-space: nowrap;
+}
+
+.fj-buybar__de {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.fj-buybar .fj-btn--primary {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: 0 var(--space-4);
+  white-space: nowrap;
+  background: var(--action);
+  color: var(--on-action);
+  box-shadow: none;
+}
+
+@keyframes fj-slide-up {
+  from {
+    transform: translateY(calc(100% + 24px));
+  }
+  to {
+    transform: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .fj-buybar {
+    display: none !important;
+  }
+}
+
+/* ---------- Mandala e símbolos ---------- */
+
+.mandala {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.symbol {
+  display: block;
+  flex: none;
+}
+
+/* ---------- Migalhas ---------- */
+
+.breadcrumbs {
+  padding-top: var(--space-4);
+}
+
+.breadcrumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+}
+
+.breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.breadcrumbs__item + .breadcrumbs__item::before {
+  content: "/";
+  margin: 0 var(--space-2);
+  color: var(--ink-muted);
+}
+
+.breadcrumbs a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.breadcrumbs [aria-current="page"] {
+  font-weight: 700;
+}
+
+/* Selo "Novo" no cartão do artista: canto de cima à esquerda da fotografia (o selo não é interativo) */
+.fj-artist__media {
+  position: relative;
+}
+
+.artist-card__novo {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 1;
+}
+
+/* ---------- Pré-visualização do artista no cartaz (lineup-hover.js) ---------- */
+
+.lineup-float {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  width: 200px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.9;
+  transition: opacity 200ms ease, scale 200ms ease;
+}
+
+.lineup-float.is-visible {
+  opacity: 1;
+  scale: 1;
+}
+
+.lineup-float img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Sem fotografia: fundo liso (papel) com o símbolo da marca centrado, na forma original (lineup-hover.js) */
+.lineup-float__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--surface-raised);
+}
+
+.lineup-float__fallback .symbol {
+  width: 60%;
+  height: 60%;
+}
+
+.lineup-float__chip {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* ---------- Página de teste (kit) ---------- */
+
+.kit {
+  padding-block: var(--space-12);
+}
+
+.kit__title {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1;
+}
+
+.kit__intro {
+  margin: 0 0 var(--space-6);
+  color: var(--ink-muted);
+}
+
+.kit__h2 {
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+.kit__h3 {
+  margin: var(--space-6) 0 var(--space-3);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.kit__symbols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.kit__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-8);
+}
+
+.kit__mandala {
+  width: min(100%, 320px);
+}
+
+/* ---------- Sem JavaScript ---------- */
+
+.no-js [role="tablist"] {
+  display: none;
+}
+
+/* ---------- Movimento reduzido ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header,
+  .site-header__list a,
+  .fj-artist,
+  .fj-artist__media img,
+  .fj-faq__icon,
+  .lineup-float {
+    transition: none;
+  }
+
+  .fj-ticket,
+  .fj-ticket:hover,
+  .fj-ticket:focus-within,
+  .fj-artist:hover,
+  .fj-artist:hover .fj-artist__media img {
+    transform: none;
+  }
+
+  .fj-buybar.is-visible {
+    animation: none;
+  }
+}

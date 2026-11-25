@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Imagem de partilha e ícone de marca (modelo para dev/og/build.mjs)</title>
+  <!-- Tokens do site: as cores da composição são as da marca. Fontes: as do site, mais Rubik Dirt para a data. -->
+  <link rel="stylesheet" href="../../public/assets/css/tokens.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&amp;family=Rubik+Dirt&amp;family=Rubik:wght@700;800;900&amp;display=swap">
+  <style>
+    html, body { margin: 0; background: var(--surface); }
+
+    /* Imagem de partilha: 1200 × 630 */
+    .og {
+      position: relative;
+      width: 1200px;
+      height: 630px;
+      overflow: hidden;
+      color: var(--ink);
+      font-family: var(--font-body);
+    }
+
+    .og__copy {
+      position: absolute;
+      left: 72px;
+      top: 0;
+      bottom: 0;
+      width: 600px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .og__eyebrow {
+      margin: 0 0 28px;
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--action);
+    }
+
+    .og__data {
+      margin: 0;
+      font-family: var(--font-poster);
+      font-weight: 400;
+      font-size: 150px;
+      line-height: 0.88;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: var(--brand-orange);
+    }
+
+    .og__data span {
+      display: block;
+    }
+
+    .og__local {
+      margin: 40px 0 10px;
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 50px;
+      line-height: 1.05;
+    }
+
+    .og__zona {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.3;
+      color: var(--ink-muted);
+    }
+
+    /* Logótipo vertical (só sobre papel, como no hero) e uma linha de três símbolos da marca, na forma original */
+    .og__marca {
+      position: absolute;
+      left: 740px;
+      top: 70px;
+      width: 380px;
+    }
+
+    .og__marca img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .og__simbolos {
+      position: absolute;
+      left: 740px;
+      top: 452px;
+      width: 380px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .og__simbolos img {
+      display: block;
+      width: 110px;
+      height: 110px;
+      object-fit: contain;
+    }
+
+    /* Ícone de ecrã inicial: 180 × 180, fundo creme, mandala centrada. Só aparece com data-modo="icone". */
+    .icone {
+      display: none;
+      width: 180px;
+      height: 180px;
+      place-items: center;
+      background: var(--surface);
+    }
+
+    .icone img {
+      width: 124px;
+      height: auto;
+    }
+
+    body[data-modo="icone"] .og { display: none; }
+    body[data-modo="icone"] .icone { display: grid; }
+  </style>
+</head>
+<body data-modo="og">
+  <main class="og" aria-label="Imagem de partilha">
+    <div class="og__copy">
+      <p class="og__eyebrow" data-slot="eyebrow">Festival Festeja · RTP África</p>
+      <p class="og__data" data-slot="data"><span data-slot="data-dias">23 E 24</span><span data-slot="data-mes">JULHO</span></p>
+      <p class="og__local" data-slot="local">Estádio do Olivais e Moscavide</p>
+      <p class="og__zona" data-slot="zona">Moscavide, Lisboa</p>
+    </div>
+
+    <div class="og__marca" aria-hidden="true">
+      <img src="../../public/assets/img/logo/logo-vertical.svg" alt="">
+    </div>
+
+    <div class="og__simbolos" aria-hidden="true">
+      <img src="../../public/assets/img/simbolos/icone-06.svg" alt="">
+      <img src="../../public/assets/img/simbolos/icone-20.svg" alt="">
+      <img src="../../public/assets/img/simbolos/icone-21.svg" alt="">
+    </div>
+  </main>
+
+  <div class="icone" aria-hidden="true">
+    <img src="../../public/assets/img/simbolos/icone-01.svg" alt="">
+  </div>
+</body>
+</html>

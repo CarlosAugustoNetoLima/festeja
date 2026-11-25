@@ -1,0 +1,12 @@
+{
+  "mote": "The festival that connects continents",
+  "resumo": "Two days of music from the Portuguese-speaking African countries at Estádio do Olivais e Moscavide, in Lisbon.",
+  "chamada": "Two days of music from the Portuguese-speaking African countries, in Lisbon.",
+  "local": { "zona": "Moscavide, Lisbon" },
+  "transportes": [
+    { "titulo": "Metro", "texto": "Red Line, Moscavide and Olivais stations" },
+    { "titulo": "Train", "texto": "Oriente station" },
+    { "titulo": "Buses", "texto": "Carris buses in the Moscavide area" },
+    { "titulo": "Car", "texto": "limited parking on nearby streets" }
+  ]
+}

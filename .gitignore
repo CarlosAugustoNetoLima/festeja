@@ -1,0 +1,9 @@
+.DS_Store
+storage/cache/*
+!storage/cache/.gitkeep
+config/site.local.php
+.taste-skill/
+shots/
+
+# Material do cliente (slides da proposta) fica fora do repositório público
+extraido-pdf/

@@ -1,0 +1,1 @@
+Os 24 símbolos da linha gráfica, numerados como na apresentação (da esquerda para a direita, linha a linha). Cores fixas da marca: laranja #e95110, ocre #e3900c e verde #133a27, sem fundo. Decorativos: alt="" e aria-hidden="true". Mínimo 32px. Vetorizados a partir da apresentação: trocar pelos originais antes da produção.

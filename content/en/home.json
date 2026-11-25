@@ -1,0 +1,40 @@
+{
+  "hero": {
+    "eyebrow": "Festival · RTP África"
+  },
+  "cartaz": {
+    "eyebrow": "Line-up",
+    "titulo": "Line-up {edicao}"
+  },
+  "bilhetes": {
+    "eyebrow": "Tickets",
+    "titulo": "Get your spot",
+    "lead": "Choose your ticket and pay securely without leaving the site. Tickett's service fee is added and shown at checkout."
+  },
+  "festival": {
+    "paises": [
+      { "nome": "Angola" },
+      { "nome": "Cape Verde" },
+      { "nome": "Guinea-Bissau" },
+      { "nome": "Mozambique" },
+      { "nome": "São Tomé and Príncipe" }
+    ],
+    "fecho": { "nome": "Portugal", "texto": "on the same stage." },
+    "notas": [
+      { "titulo": "Kizomba na Rua", "texto": "It opens both days, so you can come in dancing." },
+      { "titulo": "Cashless wristband", "texto": "You pay on site with your wristband. Any balance left over can be refunded after the festival." },
+      { "titulo": "Live on RTP África", "texto": "The concerts are broadcast on RTP África's radio, television and social channels." }
+    ]
+  },
+  "visita": {
+    "eyebrow": "Venue",
+    "titulo": "Getting there"
+  },
+  "faq": {
+    "eyebrow": "Questions",
+    "titulo": "Frequently asked questions"
+  },
+  "fecho": {
+    "eyebrow": "See you in Moscavide"
+  }
+}

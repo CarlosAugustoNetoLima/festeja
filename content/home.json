@@ -1,0 +1,40 @@
+{
+  "hero": {
+    "eyebrow": "Festival · RTP África"
+  },
+  "cartaz": {
+    "eyebrow": "Cartaz",
+    "titulo": "Cartaz {edicao}"
+  },
+  "bilhetes": {
+    "eyebrow": "Bilhetes",
+    "titulo": "Garante o teu lugar",
+    "lead": "Escolhe o teu bilhete e paga em segurança sem sair do site. A taxa de serviço da Tickett acresce e aparece no checkout."
+  },
+  "festival": {
+    "paises": [
+      { "nome": "Angola", "destaque": false },
+      { "nome": "Cabo Verde", "destaque": true },
+      { "nome": "Guiné-Bissau", "destaque": false },
+      { "nome": "Moçambique", "destaque": true },
+      { "nome": "São Tomé e Príncipe", "destaque": false }
+    ],
+    "fecho": { "nome": "Portugal", "texto": "no mesmo palco." },
+    "notas": [
+      { "titulo": "Kizomba na Rua", "texto": "Abre os dois dias, para entrares a dançar." },
+      { "titulo": "Pulseira cashless", "texto": "No recinto pagas com a pulseira. O saldo que sobrar pode ser reembolsado depois do festival." },
+      { "titulo": "Em direto na RTP África", "texto": "Os concertos passam na rádio, na televisão e nas redes da RTP África.", "rever": true }
+    ]
+  },
+  "visita": {
+    "eyebrow": "Local",
+    "titulo": "Como chegar"
+  },
+  "faq": {
+    "eyebrow": "Dúvidas",
+    "titulo": "Perguntas frequentes"
+  },
+  "fecho": {
+    "eyebrow": "Vemo-nos em Moscavide"
+  }
+}

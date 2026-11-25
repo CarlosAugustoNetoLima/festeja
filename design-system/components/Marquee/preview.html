@@ -1,0 +1,18 @@
+<!-- @dsCard group="Destaque" height=90 -->
+<!doctype html>
+<html lang="pt-PT">
+<head><meta charset="utf-8"><title>Marquee — preview</title></head>
+<body>
+<div class="fj-marquee" data-paused="false">
+  <button class="fj-marquee__pause" type="button" aria-pressed="false">Pausar</button>
+  <div class="fj-marquee__viewport" aria-hidden="true"><div class="fj-marquee__track">
+    <span>Anna Joyce</span><span>Pérola</span><span>Filho do Zua</span><span>Paulo Flores</span><span>Tabanka Djaz</span><span>Lura</span>
+    <span>Anna Joyce</span><span>Pérola</span><span>Filho do Zua</span><span>Paulo Flores</span><span>Tabanka Djaz</span><span>Lura</span>
+  </div></div>
+</div>
+<script>
+var m=document.querySelector('.fj-marquee'),b=m.querySelector('button');
+b.addEventListener('click',function(){var p=m.dataset.paused!=='true';m.dataset.paused=p;b.setAttribute('aria-pressed',p);b.textContent=p?'Retomar':'Pausar';});
+</script>
+</body>
+</html>
